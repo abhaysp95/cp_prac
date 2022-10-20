@@ -14,7 +14,9 @@ std::unordered_map<int, int> count_frequency(const int* const arr, size_t sz) {
 	return umap;
 }
 
-// for approach with O(n), there are two ways, use new_arr[arr[i]]++ or use two loops
+// for approach with O(n) (using another array), there are two ways, use new_arr[arr[i]]++ or use two loops
+//
+// find the highest/lowest frequency count can be easily done with map (as used here)
 
 
 int main(void) {
