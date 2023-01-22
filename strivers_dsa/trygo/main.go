@@ -6,10 +6,6 @@ import (
 )
 
 func main() {
-	var tstring quty.TString;
-
-	/** Strings: Reverse words */
-	// tstring.Reverse_words(os.Stdin, ".");
-	/** Strings: longest odd in string */
-	tstring.Largest_odd_number(os.Stdin);
+	var tstrings quty.TStrings
+	tstrings.LargestCommonPrefix(os.Stdin)
 }
