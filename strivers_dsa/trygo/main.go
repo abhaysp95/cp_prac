@@ -1,12 +1,17 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"rlj_cp/quty"
 )
 
 func main() {
-	/** Strings: Reverse words */
 	var tstring quty.TString;
-	tstring.Reverse_words(os.Stdin, ".");
+	fmt.Println("--------------");
+
+	/** Strings: Reverse words */
+	// tstring.Reverse_words(os.Stdin, ".");
+	/** Strings: longest odd in string */
+	tstring.Largest_odd_number(os.Stdin);
 }
