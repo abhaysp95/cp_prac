@@ -49,12 +49,19 @@ func (t *TString)reverse_words_solution(delim string) string {
 }
 
 func (t *TString)largest_odd_number_solution() string {
-	str := ""
+	/* str := ""
 	for i := range t.input {
 		str = t.input[:len(t.input) - i]
 		if num, err := strconv.ParseInt(str, 10, 0); err == nil {
 			if num % 2 != 0 {
 				return str
+			}
+		}
+	} */
+	for i := len(t.input) - 1; i >= 0; i-- {
+		if num, err := strconv.Atoi(string(t.input[i])); err == nil {
+			if num % 2 != 0 {
+				return t.input[:i + 1]
 			}
 		}
 	}
