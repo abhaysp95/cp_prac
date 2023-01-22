@@ -80,25 +80,21 @@ func (t *TString)largest_odd_number() string {
 	return ""
 }
 
+// vertical scanning
 func (t *TStrings)largest_common_prefix() string {
-	breaked := false
-	var char byte
+	if nil == t.inputs || 0 == len(t.inputs) {
+		return ""
+	}
 	var count int
-	for count = 0; ; count = count + 1 {
-		if len(t.inputs[0]) <= count {
-			break
-		}
-		char = t.inputs[0][count]  // get from the first string
-		for _, str := range t.inputs {
-			if len(str) <= count || char != str[count] {
-				breaked = true
-				break
+	for count = 0; count < len(t.inputs[0]); count = count + 1 {
+		var char byte;
+		char = t.inputs[0][count]
+		for sidx := 1; sidx < len(t.inputs); sidx = sidx + 1 {
+			if count == len(t.inputs[sidx]) || char != t.inputs[sidx][count] {
+				return t.inputs[0][:count]
 			}
-		}
-		if breaked {
-			break
 		}
 	}
 
-	return t.inputs[0][:count]
+	return t.inputs[0]
 }
