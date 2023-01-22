@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 	"rlj_cp/util/input"
-	"strconv"
+	// "strconv"
 	"strings"
 )
 
@@ -59,10 +59,13 @@ func (t *TString)largest_odd_number_solution() string {
 		}
 	} */
 	for i := len(t.input) - 1; i >= 0; i-- {
-		if num, err := strconv.Atoi(string(t.input[i])); err == nil {
+		/* if num, err := strconv.Atoi(string(t.input[i])); err == nil {
 			if num % 2 != 0 {
 				return t.input[:i + 1]
 			}
+		} */
+		if (t.input[i] - 48) % 2 != 0 {
+			return t.input[:i + 1]
 		}
 	}
 
