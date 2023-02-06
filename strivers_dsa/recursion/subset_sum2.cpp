@@ -89,7 +89,7 @@ class Solution {
 			for (size_t i{idx}; i < arr.size(); i++) {
 				if (i > idx && arr[i] == arr[i - 1]) continue;
 				cur_arr.push_back(arr[i]);
-				subsets(i + 1, arr, cur_arr, res);
+				subsets(i + 1, arr, cur_arr, res);  // call with i, because subsets are 2^n
 				cur_arr.pop_back();
 			}
 		}
