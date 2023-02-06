@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	var tstrings quty.TStrings
-	tstrings.LargestCommonPrefix(os.Stdin)
+	var tstrings quty.TStrPair;
+	tstrings.RotateString(os.Stdin)
 }

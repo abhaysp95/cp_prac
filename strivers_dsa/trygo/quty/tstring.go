@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io"
 	"rlj_cp/util/input"
+	"strconv"
+
 	// "strconv"
 	"strings"
 )
@@ -14,6 +16,11 @@ type TString struct{
 
 type TStrings struct {
 	inputs []string
+}
+
+type TStrPair struct {
+	str1 string
+	str2 string
 }
 
 // @param1: Reader interface
@@ -42,6 +49,20 @@ func (t *TString)LargestOddNumber(reader io.Reader) {
 func (t *TStrings)LargestCommonPrefix(reader io.Reader) {
 	t.inputs = input.ReadArrayStrings(reader);
 	fmt.Println(t.largest_common_prefix())
+}
+
+func (t *TStrPair)IsomorphicStrings(reader io.Reader) {
+	pair := input.ReadStringPair(reader);
+	t.str1 = pair[0]
+	t.str2 = pair[1]
+	fmt.Println(t.isomorphic_strings())
+}
+
+func (t *TStrPair)RotateString(reader io.Reader) {
+	pair := input.ReadStringPair(reader);
+	t.str1 = pair[0]
+	t.str2 = pair[1]
+	fmt.Println(t.rotate_string())
 }
 
 // Solution
@@ -97,4 +118,64 @@ func (t *TStrings)largest_common_prefix() string {
 	}
 
 	return t.inputs[0]
+}
+
+/* func (t *TStrPair)isomorphic_strings() bool {
+	if len(t.str1) != len(t.str2) {
+		return false
+	}
+
+	population := make([]int, 26)
+	for _, c := range t.str1 {
+		population[c - 97]++;
+	}
+
+	// i is for population, j is for t.str2
+	var count int
+	for i, j := 0, 0; j < len(t.str2); j++ {
+		if j < len(t.str2) - 1 && t.str2[j] == t.str2[j + 1] {
+			count++
+		} else {
+			count++
+			// shift i to first non-zero
+			for population[i] == 0 {
+				i++
+			}
+			if count != population[i] {
+				return false  // order broken
+			}
+			count = 0
+			i++
+		}
+	}
+
+	return true
+} */
+
+// not correct (will correct later)
+func (t *TStrPair)isomorphic_strings() bool {
+	fmt.Println(t.str1)
+	fmt.Println(t.str2)
+	fmt.Println(isomorphic_transform_strings(t.str1))
+	fmt.Println(isomorphic_transform_strings(t.str2))
+	return len(t.str1) == len(t.str2) &&
+		isomorphic_transform_strings(t.str1) == isomorphic_transform_strings(t.str2)
+}
+
+func isomorphic_transform_strings(str string) string {
+	map1 := make(map[rune]int, len(str))
+	builder := strings.Builder{}
+	for i, c := range str {
+		if _, ok := map1[c]; !ok {
+			map1[c] = i
+		}
+		builder.WriteString(strconv.Itoa(map1[c]))
+	}
+
+	return builder.String()
+}
+
+func (t *TStrPair)rotate_string() bool {
+	compound := t.str1 + t.str1
+	return strings.Contains(compound, t.str2)
 }

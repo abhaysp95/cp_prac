@@ -28,3 +28,14 @@ func ReadArrayStrings(reader io.Reader) []string {
 
 	return inputs
 }
+
+func ReadStringPair(reader io.Reader) []string {
+	scanner := bufio.NewScanner(reader);
+	pair := make([]string, 0, 2)
+	for i := 0; i < cap(pair); i++ {
+		scanner.Scan()
+		pair = append(pair, scanner.Text())
+	}
+
+	return pair
+}
