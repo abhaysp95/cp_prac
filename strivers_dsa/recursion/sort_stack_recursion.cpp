@@ -20,6 +20,7 @@ void sort_stack(stack<int> &st) {
 
 void insert(stack<int> &st, int temp) {
   if (st.empty() || st.top() >= temp) {
+  // if (st.empty() || st.top() <= temp) {   // this will work too (just sorted direction will change in stack)
     st.push(temp);
     return;
   }
