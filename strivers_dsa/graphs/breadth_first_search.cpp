@@ -27,6 +27,33 @@ void bfs(const vector<int>* const adj, int start) {
 	}
 }
 
+// iterative version
+/* adj: adjacency list
+ * n: no. of nodes
+ */
+void bfs_iterative(const vector<int>* const adj, int n) {
+	int visited[n + 1];  // do this if graph is starting from 1 (instead of 0)
+	memset(visited, 0, n + 1);
+	queue<int> q{};
+	// starting with 1, since input is start "1" (and not 0) based graph
+	q.push(1);
+	visited[1] = 1;
+
+	while (!q.empty()) {
+		int x = q.front();  // now this will be the new start
+		q.pop();
+		cout << x << " ";  // can store in data structure and return
+		// it's the same thing as in recursive version, you are visiting once only
+
+		for (int x: adj[x]) {
+			if (0 == visited[x]) {  // the nodes aren't visited
+				visited[x] = 1;
+				q.push(x);
+			}
+		}
+	}
+}
+
 int main(void) {
 	int n{}, e{};
 	memset(visited, 0, 100);
@@ -40,7 +67,8 @@ int main(void) {
 		adj[y].push_back(x);  // undirected & unweighted graph
 	}
 
-	bfs(adj, 1);  // starting node: 1
+	// bfs(adj, 1);  // starting node: 1
+	bfs_iterative(adj, n);  // starting node: 1
 	cout << endl;
 
 	return 0;
