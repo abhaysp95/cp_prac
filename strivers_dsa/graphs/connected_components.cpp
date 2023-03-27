@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 #include <queue>
 
+// the question can also ask this as "no. of provinces"
+
 using namespace std;
 
 void bfs(const vector<int>* const adj, int n, int* visited, int start) {
@@ -54,3 +56,14 @@ int main(void) {
 
 	return 0;
 }
+
+/** inputs:
+ * 9 7
+ * 1 2
+ * 2 3
+ * 3 1
+ * 3 4
+ * 5 6
+ * 6 7
+ * 8 9
+ */
