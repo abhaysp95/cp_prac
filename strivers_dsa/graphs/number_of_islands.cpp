@@ -48,14 +48,21 @@ void number_of_islands(vector<vector<int>>& mat, int x, int y, vector<vector<int
 		stk.pop();
 
 		/** check in all 8 directions */
-		vspush(j - 1, k);
+		/* vspush(j - 1, k);
 		vspush(j - 1, k + 1);
 		vspush(j, k + 1);
 		vspush(j + 1, k + 1);
 		vspush(j + 1, k);
 		vspush(j + 1, k - 1);
 		vspush(j, k - 1);
-		vspush(j - 1, k - 1);
+		vspush(j - 1, k - 1); */
+
+		// better way to check out neighbours
+		for (int drow = -1; drow <= 1; drow++) {
+			for (int dcol = -1; dcol <= 1; dcol++) {
+				vspush(j + drow, k + dcol);
+			}
+		}
 	}
 }
 
