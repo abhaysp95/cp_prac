@@ -35,7 +35,7 @@ int rotten_oranges(vec2& mat) {
 		for (size_t j = 0; j < mat[0].size(); j++) {
 			if (2 == mat[i][j]) {
 				visited[i][j] = 2;
-				q.push(make_pair(make_pair(i, j), 0));
+				q.push({{i, j}, 0});
 			}
 		}
 	}
@@ -47,7 +47,7 @@ int rotten_oranges(vec2& mat) {
 								  // had already rotten this orange)
 				max_iter = max(max_iter, t);
 				visited[i][j] = 2;
-				q.push(make_pair(make_pair(i, j), t));
+				q.push({{i, j}, t});
 			}
 		}
 	};
