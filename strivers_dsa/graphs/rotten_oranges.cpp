@@ -59,10 +59,16 @@ int rotten_oranges(vec2& mat) {
 		cds pd = pdlt.first;
 		// mat[pd.first][pd.second] = 2;  /* now rotten */
 
-		validate_push(pd.first - 1, pd.second, pdlt.second + 1);
+		/* validate_push(pd.first - 1, pd.second, pdlt.second + 1);
 		validate_push(pd.first + 1, pd.second, pdlt.second + 1);
 		validate_push(pd.first, pd.second - 1, pdlt.second + 1);
-		validate_push(pd.first, pd.second + 1, pdlt.second + 1);
+		validate_push(pd.first, pd.second + 1, pdlt.second + 1); */
+
+		int drow[] = {-1, 0, 1, 0};
+		int dcol[] = {0, -1, 0, 1};
+		for (size_t i{}; i < 4; i++) {  // we can also eliminate lambda needed before, with this way
+			validate_push(pd.first + drow[i], pd.second + dcol[i], pdlt.second + 1);
+		}
 	}
 
 	return max_iter;
