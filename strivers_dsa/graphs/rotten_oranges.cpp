@@ -71,6 +71,16 @@ int rotten_oranges(vec2& mat) {
 		}
 	}
 
+	/* edge case: if not all oranges are rotten, return -1 */
+	for (size_t i{}; i < mat.size(); i++) {
+		for (size_t j{}; j < mat[0].size(); j++) {
+			if (2 != visited[i][j] /* orange not rotten */
+					&& 1 == mat[i][j] /* fresh orange present at location */) {
+				return -1;
+			}
+		}
+	}
+
 	return max_iter;
 }
 
