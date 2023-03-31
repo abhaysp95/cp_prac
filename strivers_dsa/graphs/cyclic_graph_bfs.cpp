@@ -34,10 +34,11 @@ using namespace std;
 } */
 
 bool detect_cycle(const vector<int>* const adj, int n) {
-	int visited[n + 1];
+	int visited[n + 1];  // visited needs to be shared
 	for (size_t i{}; i <= n; i++) {
 		visited[i] = 0;
 	}
+
 	queue<pair<int, int>> q{};  // { current_node, parent }
 	q.push({1, -1});  // parent unknown
 	visited[1] = 1;
@@ -62,6 +63,33 @@ bool detect_cycle(const vector<int>* const adj, int n) {
 
 	return false;
 }
+
+bool detect_cycle(const vector<int>* const adj, int n, int* visited, int start) {
+	queue<pair<int, int>> q{};  // { current_node, parent }
+	q.push({start, -1});  // parent unknown
+	visited[start] = 1;
+
+	while (!q.empty()) {
+		auto cpair = q.front();
+		int cur_node = cpair.first;
+		int parent = cpair.second;
+		q.pop();
+
+		for (auto adj_node: adj[cur_node]) {
+			if (!visited[adj_node]) {
+				visited[adj_node] = 1;
+				q.push({adj_node, cur_node});
+			} else if (adj_node != parent) { // the neighbouring node is already
+											 // visited and is not my parent,
+											 // thus cycle
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 int main(void) {
 	int n{}, e{};
 	cin >> n >> e;
@@ -74,7 +102,22 @@ int main(void) {
 		adj[y].push_back(x);
 	}
 
-	cout << "cycle detected: " << (detect_cycle(adj, n) ? "true" : "false") << endl;
+	// cout << "cycle detected: " << (detect_cycle(adj, n) ? "true" : "false") << endl;
+	/* detecting cycle in connected components graph */
+	int visited[n + 1];  // visited needs to be shared
+	for (size_t i{}; i <= n; i++) {
+		visited[i] = 0;
+	}
+	bool cycle_found{false};
+	for (int i{1}; i <= n; i++) {
+		if (!visited[i]) {
+			if (detect_cycle(adj, n, visited, i)) {
+				cycle_found = true;
+				break;
+			}
+		}
+	}
+	cout << (cycle_found ? "cycle found" : "cycle not found") << endl;
 
 	return 0;
 }
@@ -97,4 +140,14 @@ int main(void) {
  * 3 6
  * 5 7
  * 6 4
+ * --------
+ * find cycle in connected components example
+ * 9 7
+ * 1 2
+ * 1 3
+ * 1 4
+ * 5 6
+ * 7 8
+ * 8 9
+ * 9 7
  */
