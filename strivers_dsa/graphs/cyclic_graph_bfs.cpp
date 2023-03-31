@@ -4,7 +4,7 @@
 
 using namespace std;
 
-bool detect_cycle(const vector<int>* const adj, int n) {
+/* bool detect_cycle(const vector<int>* const adj, int n) {
 	vector<pair<int, int>> visited{static_cast<size_t>(n + 1), {0, 0}};
 	queue<pair<int, int>> q{};
 
@@ -31,8 +31,37 @@ bool detect_cycle(const vector<int>* const adj, int n) {
 	}
 
 	return false;
-}
+} */
 
+bool detect_cycle(const vector<int>* const adj, int n) {
+	int visited[n + 1];
+	for (size_t i{}; i <= n; i++) {
+		visited[i] = 0;
+	}
+	queue<pair<int, int>> q{};  // { current_node, parent }
+	q.push({1, -1});  // parent unknown
+	visited[1] = 1;
+
+	while (!q.empty()) {
+		auto cpair = q.front();
+		int cur_node = cpair.first;
+		int parent = cpair.second;
+		q.pop();
+
+		for (auto adj_node: adj[cur_node]) {
+			if (!visited[adj_node]) {
+				visited[adj_node] = 1;
+				q.push({adj_node, cur_node});
+			} else if (adj_node != parent) { // the neighbouring node is already
+											 // visited and is not my parent,
+											 // thus cycle
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
 int main(void) {
 	int n{}, e{};
 	cin >> n >> e;
@@ -49,3 +78,23 @@ int main(void) {
 
 	return 0;
 }
+
+/** inputs:
+ * 7 7
+ * 1 2
+ * 1 3
+ * 2 5
+ * 3 4
+ * 3 6
+ * 5 7
+ * 6 7
+ * --------
+ * 7 7
+ * 1 2
+ * 1 3
+ * 2 5
+ * 3 4
+ * 3 6
+ * 5 7
+ * 6 4
+ */
