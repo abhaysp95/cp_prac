@@ -57,6 +57,21 @@ bool detect_cycle(const vector<int>* const adj, int n, int* visited, int start) 
 	return false;
 }
 
+bool detect_cycle_recursion(const vector<int>* const adj, int *visited, int parent, int start) {
+	visited[start] = 1;
+	for (auto adj_node: adj[start]) {
+		if (!visited[adj_node]) {
+			if (detect_cycle_recursion(adj, visited, start, adj_node)) {
+				return true;
+			}
+		} else if (adj_node != parent) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 int main(void) {
 	int n{}, e{};
 	cin >> n >> e;
@@ -71,6 +86,11 @@ int main(void) {
 	}
 
 	// cout << (detect_cycle(adj, n) ? "true" : "false") << endl;
+	/* int visited[n + 1];
+	for (size_t i{}; i <= n; i++) {
+		visited[i] = 0;
+	}
+	cout << (detect_cycle_recursion(adj, visited, -1, 1) ? "true" : "false") << endl; */
 	//
 	// example: cycle detection in connected components
 	int visited[n + 1];
@@ -80,7 +100,8 @@ int main(void) {
 	bool cycle_detected{false};
 	for (size_t i{1}; i <= n; i++) {
 		if (!visited[i]) {
-			if (detect_cycle(adj, n, visited, i)) {
+			// if (detect_cycle(adj, n, visited, i)) {
+			if (detect_cycle_recursion(adj, visited, -1, i)) {
 				cycle_detected = true;
 				break;
 			}
