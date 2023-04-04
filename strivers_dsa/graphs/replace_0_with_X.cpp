@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <stack>
 #include <vector>
 
 using namespace std;
@@ -42,6 +43,33 @@ void find_neighbour_zeroes(const vec2d& mat, vec2d& visited, pair<int, int> poin
 	}
 }
 
+void find_neighbour_zeroes_iterative(const vec2d& mat, stack<pair<int, int>>& stk, vec2d& visited) {
+	size_t r{mat.size()}, c{mat[0].size()};
+	while (!stk.empty()) {
+		auto point = stk.top();
+		stk.pop();
+		int x{point.first}, y{point.second};
+		visited[x][y] = '0';  // could've have done this in caller function too
+
+		for (int drow = -1; drow <= 1; drow++) {
+			for (int dcol = -1; dcol <= 1; dcol++) {
+				// get neighbours
+				if ((0 == drow || 0 == dcol) && (drow != dcol)) {
+					int x = x + drow, y = y + dcol;  // re-initialize points, so that they change correctly in each iteration
+					// check the boundry & other conditions
+					if ((x >= 0 && x < r)
+							&& (y >= 0 && y < c)
+							&& ('0' == mat[x][y])
+							&& ('X' == visited[x][y])) {
+						visited[x][y] = '0';
+						stk.push({x, y});
+					}
+				}
+			}
+		}
+	}
+}
+
 int main(void) {
 	size_t r{}, c{};
 	cin >> r >> c;
@@ -59,16 +87,20 @@ int main(void) {
 	print_matrix(mat);
 
 	vec2d visited(r, vector<char>(c, 'X'));
+	stack<pair<int, int>> stk{};  // used with dfs (recursive)
 	// collect all 0s from the border
 	for (size_t i{}; i < r; i++) {
 		for (size_t j{}; j < c; j++) {
 			if ((i == 0 || i == r - 1 || j == 0 || j == c -1)
 					&& ('0' == mat[i][j])
 					&& ('X' == visited[i][j])) {
-				find_neighbour_zeroes(mat, visited, {i, j});
+				stk.push({i, j});
+				// find_neighbour_zeroes(mat, visited, {i, j});
 			}
 		}
 	}
+
+	find_neighbour_zeroes_iterative(mat, stk, visited);
 
 	// you got visited correct
 
