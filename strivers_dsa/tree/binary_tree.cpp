@@ -2,6 +2,7 @@
 #include <memory>
 #include <queue>
 #include <random>
+#include <stack>
 
 using namespace std;
 
@@ -20,7 +21,7 @@ void add_few_node(Node* &root) {
 	root->left = new Node(7);
 	root->right = new Node(11);
 	root->left->right = new Node(8);
-	root->left->right->left = new Node(6);
+	root->left->left = new Node(6);
 	root->left->right->right = new Node(9);
 	root->right->right = new Node(14);
 	root->right->right->left = new Node(13);
@@ -72,6 +73,23 @@ void levelorder_traversal(const Node* root) {
 	}
 }
 
+// it's dfs traversal, but right child goes first in stack before left one
+void preorder_traversal_iterative(const Node* root) {
+	if (nullptr == root) return;
+
+	stack<const Node*> stk{};
+	stk.push(root);
+
+	while (!stk.empty()) {
+		auto my_node = stk.top();
+		stk.pop();
+		cout << my_node->value << " ";
+
+		if (my_node->right != nullptr) stk.push(my_node->right);
+		if (my_node->left != nullptr) stk.push(my_node->left);
+	}
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -83,6 +101,8 @@ int main(void) {
 	postorder_traversal_recursive(root);
 	cout << "\n----------------\n";
 	levelorder_traversal(root);
+	cout << "\n----------------\n";
+	preorder_traversal_iterative(root);
 
 	return 0;
 }
