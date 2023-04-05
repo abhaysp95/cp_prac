@@ -90,6 +90,25 @@ void preorder_traversal_iterative(const Node* root) {
 	}
 }
 
+void inorder_traversal_iterative(const Node *root) {
+	if (nullptr == root) return;
+
+	stack<const Node*> stk{};
+
+	while (true) {
+		if (nullptr != root) {
+			stk.push(root);
+			root = root->left;
+		} else {
+			if (stk.empty()) break;
+			const Node* parent = stk.top();
+			stk.pop();
+			cout << parent->value << " ";
+			root = parent->right;
+		}
+	}
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -103,6 +122,8 @@ int main(void) {
 	levelorder_traversal(root);
 	cout << "\n----------------\n";
 	preorder_traversal_iterative(root);
+	cout << "\n----------------\n";
+	inorder_traversal_iterative(root);
 
 	return 0;
 }
