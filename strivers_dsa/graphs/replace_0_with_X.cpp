@@ -111,3 +111,13 @@ int main(void) {
 
 	return 0;
 }
+
+/** inputs:
+ *
+ * 5 4
+ * X X X X
+ * X 0 X X
+ * X 0 0 X
+ * X 0 X X
+ * X X 0 0
+ */
