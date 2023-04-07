@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <iomanip>
 #include <memory>
 #include <queue>
 #include <random>
@@ -158,6 +159,52 @@ void postorder_traversal_iterative_single_stack(const Node *root) {
 	}
 }
 
+/**
+ * preorder, inorder & postorder traversal in one go
+ * rules:
+ * ptr.second == 1 => pop() after getting top(). print(top.value()).
+ * push(top().second++). push(if (NULL != top()->left))
+ *
+ * ptr.second == 2 => pop() after getting top(). print(top.value()).
+ * push(top().second++). push(if (NULL != top()->right))
+ *
+ * ptr.second == 3 => pop() after getting top(). print(top.value()).
+ */
+void trio_traversal_iterative(const Node *root) {
+	if (nullptr == root) return;
+
+	stack<pair<const Node*, size_t>> stk{};
+	stk.push({root, 1});
+
+	vector<int> pre{}, in{}, post{};
+
+	while (!stk.empty()) {
+		auto curr_pair = stk.top();
+		stk.pop();
+		if (1 == curr_pair.second) {
+			stk.push({curr_pair.first, curr_pair.second + 1});
+			pre.push_back(curr_pair.first->value);
+			if (nullptr != curr_pair.first->left) {
+				stk.push({curr_pair.first->left, 1});
+			}
+		} else if (2 == curr_pair.second) {
+			stk.push({curr_pair.first, curr_pair.second + 1});
+			in.push_back(curr_pair.first->value);
+			if (nullptr != curr_pair.first->right) {
+				stk.push({curr_pair.first->right, 1});
+			}
+		} else {
+			post.push_back(curr_pair.first->value);
+		}
+	}
+	cout << "preorder  inorder  postorder" << '\n';
+	for (size_t i{}; i < pre.size(); i++) {
+		cout << setw(5) << right << pre[i]
+			<< setw(9) << right << in[i]
+			<< setw(9) << right << post[i] << '\n';
+	}
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -177,6 +224,8 @@ int main(void) {
 	postorder_traversal_iterative_2stack(root);
 	cout << "\n----------------\n";
 	postorder_traversal_iterative_single_stack(root);
+	cout << "\n----------------\n";
+	trio_traversal_iterative(root);
 
 	return 0;
 }
