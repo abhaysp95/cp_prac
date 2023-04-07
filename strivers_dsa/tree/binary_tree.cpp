@@ -212,6 +212,34 @@ int tree_depth_recursive(const Node *root) {
 	return max(tree_depth_recursive(root->left), tree_depth_recursive(root->right)) + 1;
 }
 
+// level order traversal seems easiest for this job
+int tree_depth_iterative(const Node *root) {
+	if (nullptr == root) return 0;
+
+	size_t height{};
+	queue<const Node*> q{};
+	q.push(root);
+
+	while (!q.empty()) {
+		height++;
+
+		size_t qsize = q.size() + 1;  // at a time, qsize will tell the nodecount in same level
+		while (1 < qsize) {
+			const Node *curr_node = q.front();
+			q.pop();
+			if (nullptr != curr_node->left) {
+				q.push(curr_node->left);
+			}
+			if (nullptr != curr_node->right) {
+				q.push(curr_node->right);
+			}
+			qsize--;
+		}
+	}
+
+	return height;
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -235,6 +263,8 @@ int main(void) {
 	trio_traversal_iterative(root);
 	cout << "\n----------------\n";
 	cout << "tree depth (recursive): " << tree_depth_recursive(root);
+	cout << "\n----------------\n";
+	cout << "tree depth (iterative): " << tree_depth_iterative(root);
 
 	return 0;
 }
