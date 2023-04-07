@@ -244,8 +244,27 @@ int tree_depth_iterative(const Node *root) {
 /** Balanced Binary tree
  * rule: for a particular node: (height(left subtree) - height(right subtree)) <= 1
  */
+// NOTE: the problem with this approach is that it'll tell if tree is balanced
+// only for the given particular node ie., it's possible the for root the tree
+// is balanced, but some subtree of the tree is not balanced on the inside, the
+// tree I've created for the demo is good example of it
 bool balanced_binary_tree(const Node *root) {
 	return abs(tree_depth_iterative(root->left) - tree_depth_iterative(root->right)) <= 1;
+}
+
+// return -1, if tree is not balanced, else return the tree's height (ie., tree is balanced)
+ssize_t balanced_binary_tree_another_shot(const Node *root) {
+	if (nullptr == root) {
+		return 0;
+	}
+
+	size_t lh = balanced_binary_tree_another_shot(root->left);
+	size_t rh = balanced_binary_tree_another_shot(root->right);
+
+	if ((max(lh, rh) - min(lh, rh)) > 1) {
+		return -1;
+	}
+	return max(lh, rh) + 1;
 }
 
 int main(void) {
@@ -275,6 +294,8 @@ int main(void) {
 	cout << "tree depth (iterative): " << tree_depth_iterative(root);
 	cout << "\n----------------\n";
 	cout << "is tree balanced: " << balanced_binary_tree(root);
+	cout << "\n----------------\n";
+	cout << "is tree balanced: " << balanced_binary_tree_another_shot(root);
 
 	return 0;
 }
