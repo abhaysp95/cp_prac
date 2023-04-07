@@ -131,6 +131,33 @@ void postorder_traversal_iterative_2stack(const Node *root) {
 	}
 }
 
+void postorder_traversal_iterative_single_stack(const Node *root) {
+	stack<const Node*> stk{};
+
+	while (nullptr != root || !stk.empty()) {
+		if (nullptr != root) {
+			stk.push(root);
+			root = root->left;
+		} else {  // root has no left child
+			if (nullptr == stk.top()->right) {  // if root has no right child
+				// print the parent now (because left & right of a parent is done now)
+				const Node *parent = stk.top();
+				stk.pop();
+				cout << parent->value << " ";
+				// if the parent was the right child then you've to print it's parent too
+				// until either stack is empty or the parent becomes it's parent's left child
+				while (!stk.empty() && parent == stk.top()->right) {
+					parent = stk.top();
+					cout << stk.top()->value << " ";
+					stk.pop();
+				}
+			} else {  // root has right child, make it current root
+				root = stk.top()->right;
+			}
+		}
+	}
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -148,6 +175,8 @@ int main(void) {
 	inorder_traversal_iterative(root);
 	cout << "\n----------------\n";
 	postorder_traversal_iterative_2stack(root);
+	cout << "\n----------------\n";
+	postorder_traversal_iterative_single_stack(root);
 
 	return 0;
 }
