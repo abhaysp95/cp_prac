@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <cmath>
 #include <iomanip>
 #include <memory>
 #include <queue>
@@ -240,6 +241,13 @@ int tree_depth_iterative(const Node *root) {
 	return height;
 }
 
+/** Balanced Binary tree
+ * rule: for a particular node: (height(left subtree) - height(right subtree)) <= 1
+ */
+bool balanced_binary_tree(const Node *root) {
+	return abs(tree_depth_iterative(root->left) - tree_depth_iterative(root->right)) <= 1;
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -265,6 +273,8 @@ int main(void) {
 	cout << "tree depth (recursive): " << tree_depth_recursive(root);
 	cout << "\n----------------\n";
 	cout << "tree depth (iterative): " << tree_depth_iterative(root);
+	cout << "\n----------------\n";
+	cout << "is tree balanced: " << balanced_binary_tree(root);
 
 	return 0;
 }
