@@ -109,6 +109,28 @@ void inorder_traversal_iterative(const Node *root) {
 	}
 }
 
+void postorder_traversal_iterative_2stack(const Node *root) {
+	if (nullptr == root) return;
+
+	stack<const Node*> stk{};
+	stack<const Node*> print_stk{};
+	stk.push(root);
+
+	while (!stk.empty()) {
+		const Node* curr_node = stk.top();
+		stk.pop();
+		print_stk.push(curr_node);
+
+		if (nullptr != curr_node->left) stk.push(curr_node->left);
+		if (nullptr != curr_node->right) stk.push(curr_node->right);
+	}
+
+	while (!print_stk.empty()) {
+		cout << print_stk.top()->value << " ";
+		print_stk.pop();
+	}
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -124,6 +146,8 @@ int main(void) {
 	preorder_traversal_iterative(root);
 	cout << "\n----------------\n";
 	inorder_traversal_iterative(root);
+	cout << "\n----------------\n";
+	postorder_traversal_iterative_2stack(root);
 
 	return 0;
 }
