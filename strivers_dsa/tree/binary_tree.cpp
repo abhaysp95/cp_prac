@@ -205,6 +205,13 @@ void trio_traversal_iterative(const Node *root) {
 	}
 }
 
+// maximum depth/height of tree (number of max edges in a path + 1)
+int tree_depth_recursive(const Node *root) {
+	if (nullptr == root) return 0;
+
+	return max(tree_depth_recursive(root->left), tree_depth_recursive(root->right)) + 1;
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -226,6 +233,8 @@ int main(void) {
 	postorder_traversal_iterative_single_stack(root);
 	cout << "\n----------------\n";
 	trio_traversal_iterative(root);
+	cout << "\n----------------\n";
+	cout << "tree depth (recursive): " << tree_depth_recursive(root);
 
 	return 0;
 }
