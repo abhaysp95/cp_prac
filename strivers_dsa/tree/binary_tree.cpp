@@ -282,6 +282,18 @@ void tree_diameter_brute_force(const Node *root, size_t& maxd) {
 	tree_diameter_brute_force(root->right, maxd);
 }
 
+// better approach is to not call functions to calculate the height of tree seperately
+size_t tree_diameter(const Node *root, size_t &maxd) {
+	if (nullptr == root) return 0;
+
+	size_t lh = tree_diameter(root->left, maxd);
+	size_t rh = tree_diameter(root->right, maxd);
+
+	maxd = max(maxd, lh + rh);
+
+	return max(lh, rh) + 1;
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -312,7 +324,7 @@ int main(void) {
 	cout << "\n----------------\n";
 	cout << "is tree balanced: " << balanced_binary_tree_another_shot(root);
 	size_t maxd{};
-	tree_diameter_brute_force(root, maxd);
+	tree_diameter(root, maxd);
 	cout << "\n----------------\n";
 	cout << "diameter of tree: " << maxd;
 
