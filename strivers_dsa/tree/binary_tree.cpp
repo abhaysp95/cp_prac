@@ -347,6 +347,44 @@ bool identical_trees_iterative(const Node *root1, const Node *root2) {
 	return true;
 }
 
+
+void zig_zag_traversal(const Node *root) {
+	if (nullptr == root) return;
+
+	queue<const Node *> q{};
+	q.push(root);
+
+	bool ltr{true};
+	while (!q.empty()) {
+		size_t height = q.size() + 1;
+		vector<int> values;
+
+		while (height > 1) {
+			const Node* curr_node = q.front();
+			values.push_back(curr_node->value);
+			q.pop();
+
+			if (nullptr != curr_node->left) q.push(curr_node->left);
+			if (nullptr != curr_node->right) q.push(curr_node->right);
+
+			height--;
+		}
+
+		if (ltr) {
+			for (auto citer = values.cbegin(); citer != values.cend(); citer++) {
+				cout << *citer << ' ';
+			}
+		} else {
+			for (auto citer = values.crbegin(); citer != values.crend(); citer++) {
+				cout << *citer << ' ';
+			}
+		}
+		cout << '\n';
+
+		ltr = !ltr;
+	}
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -389,6 +427,9 @@ int main(void) {
 	// root2->left->left->left = new Node(5);  // uncomment this line to make the second tree unidentical
 	cout << "\n----------------\n";
 	cout << "root1 & root2 identical: " << (identical_trees_iterative(root, root2) ? "true" : "false");
+	cout << "\n----------------\n";
+	cout << "zig zag traversal: \n";
+	zig_zag_traversal(root);
 
 	return 0;
 }
