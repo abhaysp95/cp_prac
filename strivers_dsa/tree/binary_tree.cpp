@@ -302,7 +302,7 @@ int maximum_path_sum(const Node *root) {
 }
 
 // identical tree
-bool identical_trees(const Node *root1, const Node *root2) {
+bool identical_trees_recursive(const Node *root1, const Node *root2) {
 	if ((nullptr == root1 && root2)
 			|| (nullptr == root2 && root1)) {
 		return false;
@@ -310,7 +310,41 @@ bool identical_trees(const Node *root1, const Node *root2) {
 		return true;
 	}
 
-	return identical_trees(root1->left, root2->left) && identical_trees(root1->right, root1->right);
+	return identical_trees_recursive(root1->left, root2->left) && identical_trees_recursive(root1->right, root1->right);
+}
+
+bool identical_trees_iterative(const Node *root1, const Node *root2) {
+	if ((!root1 && root2) || (root1 && !root2)) return false;
+	else if (!root1 && !root2) return true;
+
+	queue<const Node*> q1{};
+	queue<const Node*> q2{};
+
+	q1.push(root1);
+	q2.push(root2);
+
+	while (!q1.empty() || !q2.empty()) {
+		if (q1.size() != q2.size()) return false;
+
+		size_t height = q1.size() + 1;
+
+		while (height > 1) {
+			const Node *cnode1 = q1.front();
+			const Node *cnode2 = q2.front();
+			q1.pop();
+			q2.pop();
+
+			if (nullptr != cnode1->left) q1.push(cnode1->left);
+			if (nullptr != cnode1->right) q1.push(cnode1->right);
+
+			if (nullptr != cnode2->left) q2.push(cnode2->left);
+			if (nullptr != cnode2->right) q2.push(cnode2->right);
+
+			height--;
+		}
+	}
+
+	return true;
 }
 
 int main(void) {
@@ -354,7 +388,7 @@ int main(void) {
 	add_few_node(root2);
 	// root2->left->left->left = new Node(5);  // uncomment this line to make the second tree unidentical
 	cout << "\n----------------\n";
-	cout << "root1 & root2 identical: " << (identical_trees(root, root2) ? "true" : "false");
+	cout << "root1 & root2 identical: " << (identical_trees_iterative(root, root2) ? "true" : "false");
 
 	return 0;
 }
