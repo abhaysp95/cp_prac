@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <bits/stdc++.h>
 #include <cmath>
 #include <iomanip>
@@ -207,14 +208,14 @@ void trio_traversal_iterative(const Node *root) {
 }
 
 // maximum depth/height of tree (number of max edges in a path + 1)
-int tree_depth_recursive(const Node *root) {
+size_t tree_depth_recursive(const Node *root) {
 	if (nullptr == root) return 0;
 
 	return max(tree_depth_recursive(root->left), tree_depth_recursive(root->right)) + 1;
 }
 
 // level order traversal seems easiest for this job
-int tree_depth_iterative(const Node *root) {
+size_t tree_depth_iterative(const Node *root) {
 	if (nullptr == root) return 0;
 
 	size_t height{};
@@ -248,9 +249,9 @@ int tree_depth_iterative(const Node *root) {
 // only for the given particular node ie., it's possible the for root the tree
 // is balanced, but some subtree of the tree is not balanced on the inside, the
 // tree I've created for the demo is good example of it
-bool balanced_binary_tree(const Node *root) {
+/* bool balanced_binary_tree(const Node *root) {
 	return abs(tree_depth_iterative(root->left) - tree_depth_iterative(root->right)) <= 1;
-}
+} */
 
 // return -1, if tree is not balanced, else return the tree's height (ie., tree is balanced)
 ssize_t balanced_binary_tree_another_shot(const Node *root) {
@@ -265,6 +266,20 @@ ssize_t balanced_binary_tree_another_shot(const Node *root) {
 		return -1;
 	}
 	return max(lh, rh) + 1;
+}
+
+// diameter of binary tree
+// * longest path between two nodes, which doesn't necessarily needs to be passed from root node
+void tree_diameter_brute_force(const Node *root, size_t& maxd) {
+	if (nullptr == root) return;
+
+	size_t lh = tree_depth_recursive(root->left);
+	size_t rh = tree_depth_recursive(root->right);
+
+	maxd = max(maxd, lh + rh);
+
+	tree_diameter_brute_force(root->left, maxd);
+	tree_diameter_brute_force(root->right, maxd);
 }
 
 int main(void) {
@@ -292,10 +307,14 @@ int main(void) {
 	cout << "tree depth (recursive): " << tree_depth_recursive(root);
 	cout << "\n----------------\n";
 	cout << "tree depth (iterative): " << tree_depth_iterative(root);
-	cout << "\n----------------\n";
-	cout << "is tree balanced: " << balanced_binary_tree(root);
+	/* cout << "\n----------------\n";
+	cout << "is tree balanced: " << balanced_binary_tree(root); */
 	cout << "\n----------------\n";
 	cout << "is tree balanced: " << balanced_binary_tree_another_shot(root);
+	size_t maxd{};
+	tree_diameter_brute_force(root, maxd);
+	cout << "\n----------------\n";
+	cout << "diameter of tree: " << maxd;
 
 	return 0;
 }
