@@ -294,6 +294,13 @@ size_t tree_diameter(const Node *root, size_t &maxd) {
 	return max(lh, rh) + 1;
 }
 
+// maximum sum you can get from a path of tree (nodes can't be repeated)
+int maximum_path_sum(const Node *root) {
+	if (nullptr == root) return 0;
+
+	return max(maximum_path_sum(root->left), maximum_path_sum(root->right)) + root->value;
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -327,6 +334,8 @@ int main(void) {
 	tree_diameter(root, maxd);
 	cout << "\n----------------\n";
 	cout << "diameter of tree: " << maxd;
+	cout << "\n----------------\n";
+	cout << "maximum path sum: " << maximum_path_sum(root);
 
 	return 0;
 }
