@@ -301,6 +301,18 @@ int maximum_path_sum(const Node *root) {
 	return max(maximum_path_sum(root->left), maximum_path_sum(root->right)) + root->value;
 }
 
+// identical tree
+bool identical_trees(const Node *root1, const Node *root2) {
+	if ((nullptr == root1 && root2)
+			|| (nullptr == root2 && root1)) {
+		return false;
+	} else if (nullptr == root1 && nullptr == root2) {
+		return true;
+	}
+
+	return identical_trees(root1->left, root2->left) && identical_trees(root1->right, root1->right);
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -336,6 +348,13 @@ int main(void) {
 	cout << "diameter of tree: " << maxd;
 	cout << "\n----------------\n";
 	cout << "maximum path sum: " << maximum_path_sum(root);
+
+	// preperation of another tree, needed to check if two trees are identical or not
+	Node *root2 = nullptr;
+	add_few_node(root2);
+	// root2->left->left->left = new Node(5);  // uncomment this line to make the second tree unidentical
+	cout << "\n----------------\n";
+	cout << "root1 & root2 identical: " << (identical_trees(root, root2) ? "true" : "false");
 
 	return 0;
 }
