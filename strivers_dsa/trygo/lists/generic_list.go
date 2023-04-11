@@ -1,148 +1,59 @@
 package lists
 
-import (
-	"fmt"
-	"golang.org/x/exp/constraints"
-)
+import "fmt"
 
-func reverse[T any](s []T) {
-	l := len(s)
-	for i := 0; i < l/2; i++ {
-		s[i], s[l-i-1] = s[l-i-1], s[i]
-	}
+type Node[T Number] struct {
+	next *Node[T]
+	val T
 }
 
-func forEach[T any](s []T, f func(ele T, i int, s []T)) {
-	for i, ele := range s {
-		f(ele, i, s)
-	}
-}
+func (n *Node[T]) add_node(num T) {
 
-// for map, key type must always satisfy comparable constraint
-func keys[K comparable, V any](m map[K]V) []K {
-	key := make([]K, len(m))
-
-	i := 0
-	for k := range m {
-		key[i] = k
-		i++
+	if nil == n {
+		fmt.Println("if")
+		new_node := new(Node[T])
+		new_node.val = num
+		new_node.next = nil
+		n = new_node
+		return
 	}
 
-	return key
+	fmt.Println("add node", num)
+
+
+	new_node := new(Node[T])
+	new_node.val = num
+	fmt.Printf("new_node %v, %[1]T\n", new_node)
+	fmt.Printf("n %v, %[1]T\n", n)
+	new_node.next = n
+	n = new_node
+	fmt.Printf("new_node %v, %[1]T\n", new_node)
+	fmt.Printf("n %v, %[1]T\n", n)
+	fmt.Println("-------------")
 }
 
-type MyStruct[T any] struct {
-	inner T
-}
+func (n *Node[T]) print() {
+	if nil == n {
+		return
+	}
 
-// no new type parameter is allowed in struct methods
-func (m *MyStruct[T]) Get() T {
-	return m.inner
-}
+	fmt.Println("print node")
 
-func (m *MyStruct[T]) Set(val T) {
-	m.inner = val
+	tn := n
+	for nil != tn {
+		fmt.Println(tn.val)
+		tn = tn.next
+	}
 }
 
 func ListExecutor() {
-	l := []int{1, 2, 3, 4, 5}
-	reverse(l)
-	fmt.Println(l)
+	var node Node[int]
 
-	fmt.Println("finalMin: ", finalMin(10, 20))
-}
+	fmt.Printf("%v, %[1]T\n", node)
 
-// type parameter in generic types (generic types can be nested with other types)
-type Entries[K, V any] struct {
-	Key   K
-	Value V
-}
-
-func entriesMapToStruct[K comparable, V any](m map[K]V) []*Entries[K, V] {
-	entries := make([]*Entries[K, V], len(m))
-
-	i := 0
-	for k, v := range m {
-		newEntry := new(Entries[K, V])
-		newEntry.Key = k
-		newEntry.Value = v
-		entries[i] = newEntry
-		i += 1
+	for i := 1; i <= 5; i++ {
+		node.add_node(i)
 	}
 
-	return entries
+	node.print()
 }
-
-// Go generics are only allowed to perform specific operations listed in an
-// interface, this interface is known as constraint
-
-// predefined types in constraints
-type Number interface {
-	int | int8 | int16 | int32 | int64 | float32 | float64 // resulting interface allows common operations in all union types
-}
-
-func Min[T Number](x, y T) T {
-	if x < y {
-		return x
-	}
-	return y
-}
-
-
-// type approxiMation
-
-// any type with given underlying type will be supported by this interface
-type Number1 interface {
-	~int | ~int8 | ~int16 | ~int32 | ~int64 | ~float32 | ~float64
-}
-
-type Point int
-
-func Min1[T Number1](x, y T) T {
-	if x < y {
-		return x
-	}
-	return y
-}
-
-/* func main() {
-	x, y := Point(5), Point(2)
-	fmt.Println(Min(x, y))
-} */
-
-// all predefined types support approx. type (~ operator only works for constraints)
-func Min2[T ~int | ~float32 | ~float64](x, y T) T {
-	if x < y {
-		return x
-	}
-	return y
-}
-
-// Nesting constraints
-type Integer interface {
-	~int | ~int8 | ~int16 | ~int32 | ~int64
-}
-
-type Float interface {
-	~float32 | ~float64
-}
-
-type Number3 interface {
-	Integer | Float
-}
-
-func Min3[T Number3](x, y T) T {
-	if x < y {
-		return x
-	}
-	return y
-}
-
-// there's also constraints package
-func finalMin[T constraints.Ordered](x, y T) T {
-	if x < y {
-		return x
-	}
-	return y
-}
-

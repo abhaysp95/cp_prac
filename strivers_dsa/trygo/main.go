@@ -1,6 +1,8 @@
 package main
 
-import "rlj_cp/lists"
+import (
+	"rlj_cp/concurrency"
+)
 
 func main() {
 	/* var tstrings quty.TStrPair;
@@ -14,5 +16,5 @@ func main() {
 	} */
 
 
-	lists.ListExecutor()
+	concurrency.TreeExecutor()
 }
