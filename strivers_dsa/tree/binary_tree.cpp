@@ -2,9 +2,11 @@
 #include <bits/stdc++.h>
 #include <cmath>
 #include <iomanip>
+#include <map>
 #include <memory>
 #include <queue>
 #include <random>
+#include <set>
 #include <stack>
 
 using namespace std;
@@ -379,7 +381,7 @@ void zig_zag_traversal(const Node *root) {
 				cout << *citer << ' ';
 			}
 		}
-		cout << '\n';
+		// cout << '\n';  // not matching with aesthetics of rest of the function
 
 		ltr = !ltr;
 	}
@@ -452,6 +454,50 @@ void boundary_traversal(const Node *root) {
 	}
 }
 
+// the trick is the imagine the tree in XY plane and give the nodes the co-ordinates
+// Consider the root node at origin, when moving left decrease X, when moving right increase X
+// when moving down, just increment Y (I know, in actual plane you decrease Y, but this makes things easier)
+void vertical_order_traversal(const Node* root) {
+	if (nullptr == root) return;
+
+	// if the ds name is not using unordered here, that means it's ordered one
+	// outer map's key will represent vertical (column) and inner map's key will represent row
+	map<int, map<int, multiset<int>>> res{};
+
+	// do the level order traversal
+	// stores, the vertical and horizontal index of a node (consider the in XY plane)
+	queue<pair<const Node*, pair<int, int>>> q{};
+	q.push({root, {0, 0}});
+
+	while (!q.empty()) {
+		auto node_details = q.front();
+		const Node* cnode = node_details.first;
+		int xidx = node_details.second.first;
+		int yidx = node_details.second.second;
+		q.pop();
+
+		/* if (res[xidx][yidx].find(yidx) == res[xidx][yidx].cend()) {
+			res[xidx][yidx].
+		} */
+		res[xidx][yidx].insert(cnode->value);
+
+		if (cnode->left) {
+			q.push({cnode->left, {xidx - 1, yidx + 1}});
+		}
+		if (cnode->right) {
+			q.push({cnode->right, {xidx + 1, yidx + 1}});
+		}
+	}
+
+	for (auto inm: res) {
+		for (auto mset: inm.second) {
+			for (int nval: mset.second) {
+				cout << nval  << " ";
+			}
+		}
+	}
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -500,6 +546,9 @@ int main(void) {
 	cout << "\n----------------\n";
 	cout << "boundary traversal: \n";
 	boundary_traversal(root);
+	cout << "\n----------------\n";
+	cout << "vertical order traversal: \n";
+	vertical_order_traversal(root);
 
 	return 0;
 }
