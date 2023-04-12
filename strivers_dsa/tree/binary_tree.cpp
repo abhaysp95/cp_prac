@@ -385,6 +385,73 @@ void zig_zag_traversal(const Node *root) {
 	}
 }
 
+// boundary traversal of binary tree
+// preperation starts here
+void get_left_boundary(const Node* root, vector<int>& res) {
+	if (nullptr == root
+			|| (nullptr == root->left && nullptr == root->right)) {
+		return;
+	}
+
+	res.push_back(root->value);
+	if (root->left) {
+		get_left_boundary(root->left, res);
+	} else if (root->right) {
+		get_left_boundary(root->right, res);
+	}
+}
+
+void get_leafs(const Node* root, vector<int>& res) {
+	// inorder traversal makes it easy to get the leaf node in proper way
+	if (nullptr == root) {
+		return;
+	} else if (nullptr == root->left && nullptr == root->right) {
+		res.push_back(root->value);
+		return;
+	}
+
+	get_leafs(root->left, res);
+	get_leafs(root->right, res);
+}
+
+void get_right_boundary(const Node* root, stack<int>& res) {
+	if (nullptr == root
+			|| (nullptr == root->left && nullptr == root->right)) {
+		return;
+	}
+
+	res.push(root->value);
+	if (root->right) {
+		get_right_boundary(root->right, res);
+	} else if (root->left) {
+		get_right_boundary(root->left, res);
+	}
+}
+
+void boundary_traversal(const Node *root) {
+	vector<int> res{};
+
+	// 3 steps (anti-clockwise)
+	// first get the left boundary
+	get_left_boundary(root, res);
+
+	// get all the leaf node
+	get_leafs(root, res);
+
+	// get the right boundary (should be in reverse)
+	stack<int> rights{};
+	get_right_boundary(root, rights);
+
+	while (rights.size() > 1) {
+		res.push_back(rights.top());
+		rights.pop();
+	}
+
+	for (int val: res) {
+		cout << val << " ";
+	}
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -430,6 +497,9 @@ int main(void) {
 	cout << "\n----------------\n";
 	cout << "zig zag traversal: \n";
 	zig_zag_traversal(root);
+	cout << "\n----------------\n";
+	cout << "boundary traversal: \n";
+	boundary_traversal(root);
 
 	return 0;
 }
