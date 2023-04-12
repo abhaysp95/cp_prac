@@ -532,7 +532,7 @@ void vertical_order_traversal(const Node* root) {
 }
 
 // intial approach is, to get the left boundary (reverse) and then right boundary
-
+// this approach is inspired by "boundary_traversal" wrote above
 void top_view_of_tree(const Node *root) {
 	vector<int> res{};
 
@@ -549,6 +549,76 @@ void top_view_of_tree(const Node *root) {
 
 	for (auto x: res) {
 		cout << x << " ";
+	}
+}
+
+// another implementation of top_view_of_tree
+// this approach is inspired by "vertical_order_traversal", except this time, we
+// don't need to store Y, because top-most node on Y axis is the node which will
+// be seen from top-view
+void top_view_of_tree_second_approach(const Node* root) {
+	if (nullptr == root) return;
+
+	map<int, int> res{};  // key: X-axis point, value: node->value
+	queue<pair<int, const Node*>> q{};  // {X-axis, node}
+	q.push({0, root});
+
+	while (!q.empty()) {
+		auto cpair = q.front();
+		int xpoint = cpair.first;
+		const Node* cnode = cpair.second;
+		q.pop();
+
+		// if there's already a node for a xpoint, that means it is the topmost one on that vertical line
+		if (res.find(xpoint) == res.cend()) {  // not found
+			res[xpoint] = cnode->value;
+		}
+
+		if (cnode->left) {
+			q.push({xpoint - 1, cnode->left});
+		}
+		if (cnode->right) {
+			q.push({xpoint + 1, cnode->right});
+		}
+	}
+
+	for (auto p: res) {
+		cout << p.second << " ";
+	}
+}
+
+// intial intuition can be that: you get the all the leaf nodes and that's it
+// but, there's an edge case. Consider the tree I'm using,
+// 8 would not be counted as leaf node, but it is visible if a user sees tree from botton
+// we'll again use level order traversal
+void bottom_view_of_tree(const Node* root) {
+	if (nullptr == root) return;
+
+	map<int, int> res{};
+	queue<pair<int, const Node*>> q{};
+	q.push({0, root});
+
+	while (!q.empty()) {
+		auto cpair = q.front();
+		int xpoint = cpair.first;
+		const Node* cnode = cpair.second;
+		q.pop();
+
+		// this time we don't need to find whether a node already exists
+		// with xpoint, cause the bottom most node for a vertical line
+		// is the resul
+		res[xpoint] = cnode->value;
+
+		if (cnode->left) {
+			q.push({xpoint - 1, cnode->left});
+		}
+		if (cnode->right) {
+			q.push({xpoint + 1, cnode->right});
+		}
+	}
+
+	for (auto p: res) {
+		cout << p.second << " ";
 	}
 }
 
@@ -604,8 +674,14 @@ int main(void) {
 	cout << "vertical order traversal: \n";
 	vertical_order_traversal(root);
 	cout << "\n----------------\n";
-	cout << "vertical order traversal: \n";
+	cout << "top view of tree: \n";
 	top_view_of_tree(root);
+	cout << "\n----------------\n";
+	cout << "top view of tree (2nd approach): \n";
+	top_view_of_tree_second_approach(root);
+	cout << "\n----------------\n";
+	cout << "bottom view of tree: \n";
+	bottom_view_of_tree(root);
 
 	return 0;
 }
