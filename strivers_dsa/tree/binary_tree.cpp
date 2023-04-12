@@ -389,17 +389,23 @@ void zig_zag_traversal(const Node *root) {
 
 // boundary traversal of binary tree
 // preperation starts here
-void get_left_boundary(const Node* root, vector<int>& res) {
-	if (nullptr == root
-			|| (nullptr == root->left && nullptr == root->right)) {
+void get_left_boundary(const Node* root, vector<int>& res, bool include_leaf) {
+	if (nullptr == root) {
+		return;
+	}
+	if (nullptr == root->left && nullptr == root->right) {
+		// this change necessary cause I'm also using this function with other traversals like (top_view_of_tree)
+		if (include_leaf) {
+			res.push_back(root->value);
+		}
 		return;
 	}
 
 	res.push_back(root->value);
 	if (root->left) {
-		get_left_boundary(root->left, res);
+		get_left_boundary(root->left, res, include_leaf);
 	} else if (root->right) {
-		get_left_boundary(root->right, res);
+		get_left_boundary(root->right, res, include_leaf);
 	}
 }
 
@@ -416,17 +422,37 @@ void get_leafs(const Node* root, vector<int>& res) {
 	get_leafs(root->right, res);
 }
 
-void get_right_boundary(const Node* root, stack<int>& res) {
-	if (nullptr == root
-			|| (nullptr == root->left && nullptr == root->right)) {
+void get_right_boundary(const Node* root, vector<int>& res, bool include_leaf) {
+	if (nullptr == root) {
+		return;
+	}
+	if (nullptr == root->left && nullptr == root->right) {
+		if (include_leaf) {
+			res.push_back(root->value);
+		}
 		return;
 	}
 
-	res.push(root->value);
+	res.push_back(root->value);
 	if (root->right) {
-		get_right_boundary(root->right, res);
+		get_right_boundary(root->right, res, include_leaf);
 	} else if (root->left) {
-		get_right_boundary(root->left, res);
+		get_right_boundary(root->left, res, include_leaf);
+	}
+}
+
+template<typename BidirectionalIterator>
+void traverse_boundary_vectors(BidirectionalIterator start, BidirectionalIterator end, vector<int>& storage, bool include_root) {
+	if (include_root) {
+		while (start != end) {
+			storage.push_back(*start);
+			start++;
+		}
+	} else {
+		while (start + 1 != end) {
+			storage.push_back(*start);
+			start++;
+		}
 	}
 }
 
@@ -435,19 +461,25 @@ void boundary_traversal(const Node *root) {
 
 	// 3 steps (anti-clockwise)
 	// first get the left boundary
-	get_left_boundary(root, res);
+	// we can use the main "res" vector here,
+	// but I'm making changes so that the lefts can be traversed in both direction
+	vector<int> lefts{};
+	get_left_boundary(root, lefts, false);
+	traverse_boundary_vectors(lefts.cbegin(), lefts.cend(), res, true);
 
 	// get all the leaf node
 	get_leafs(root, res);
 
 	// get the right boundary (should be in reverse)
-	stack<int> rights{};
-	get_right_boundary(root, rights);
+	vector<int> rights{};
+	get_right_boundary(root, rights, false);
 
-	while (rights.size() > 1) {
-		res.push_back(rights.top());
-		rights.pop();
-	}
+	// traverse this vector in reverse (and leave the last element)
+	// changed it from stack to vector (cause I need to use this function in other places too)
+	/* for (auto criter = rights.crbegin(); criter + 1 != rights.crend(); criter++) {
+		res.push_back(*criter);
+	} */
+	traverse_boundary_vectors(rights.crbegin(), rights.crend(), res, false);
 
 	for (int val: res) {
 		cout << val << " ";
@@ -479,6 +511,7 @@ void vertical_order_traversal(const Node* root) {
 		/* if (res[xidx][yidx].find(yidx) == res[xidx][yidx].cend()) {
 			res[xidx][yidx].
 		} */
+		// you don't need to do find (check contain or such) unlike Java
 		res[xidx][yidx].insert(cnode->value);
 
 		if (cnode->left) {
@@ -495,6 +528,27 @@ void vertical_order_traversal(const Node* root) {
 				cout << nval  << " ";
 			}
 		}
+	}
+}
+
+// intial approach is, to get the left boundary (reverse) and then right boundary
+
+void top_view_of_tree(const Node *root) {
+	vector<int> res{};
+
+	// get left boundary reverse
+	vector<int> lefts{};
+	get_left_boundary(root, lefts, true);
+
+	// get right boundary
+	vector<int> rights{};
+	get_right_boundary(root, rights, true);
+
+	traverse_boundary_vectors(lefts.crbegin(), lefts.crend(), res, false);
+	traverse_boundary_vectors(rights.cbegin(), rights.cend(), res, true);
+
+	for (auto x: res) {
+		cout << x << " ";
 	}
 }
 
@@ -549,6 +603,9 @@ int main(void) {
 	cout << "\n----------------\n";
 	cout << "vertical order traversal: \n";
 	vertical_order_traversal(root);
+	cout << "\n----------------\n";
+	cout << "vertical order traversal: \n";
+	top_view_of_tree(root);
 
 	return 0;
 }
