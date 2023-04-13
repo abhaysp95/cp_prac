@@ -657,6 +657,40 @@ void right_view_of_binary_tree(const Node* root) {
 	}
 }
 
+// similar to right view of binary tree
+void left_view_of_binary_tree(const Node* root) {
+	if (nullptr == root) return;
+
+	vector<int> res{};
+	queue<const Node*> q{};
+	q.push(root);
+
+	while (!q.empty()) {
+		size_t qsize = q.size() + 1, first = qsize - 1;
+
+		while (1 < qsize) {
+			const Node* cur_node = q.front();
+			if (qsize - 1 == first) {
+				res.push_back(cur_node->value);
+			}
+			q.pop();
+
+			if (cur_node->left) {
+				q.push(cur_node->left);
+			}
+			if (cur_node->right) {
+				q.push(cur_node->right);
+			}
+
+			qsize--;
+		}
+	}
+
+	for (auto x: res) {
+		cout << x << " ";
+	}
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -722,6 +756,9 @@ int main(void) {
 	root->left->left->left->right = new Node(5);  // uncomment to test right view */
 	cout << "right view of tree: \n";
 	right_view_of_binary_tree(root);
+	cout << "\n----------------\n";
+	cout << "left view of tree: \n";
+	left_view_of_binary_tree(root);
 
 	return 0;
 }
