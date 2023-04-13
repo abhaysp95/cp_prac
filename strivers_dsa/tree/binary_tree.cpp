@@ -622,6 +622,41 @@ void bottom_view_of_tree(const Node* root) {
 	}
 }
 
+// how tree will look in 1D when looked from right side
+// start with level order traversal
+void right_view_of_binary_tree(const Node* root) {
+	if (nullptr == root) return;
+
+	vector<int> res{};
+	queue<const Node*> q{};
+	q.push(root);
+
+	while(!q.empty()) {
+		size_t qsize = q.size() + 1;
+
+		// in a level pick out the right most element
+		while (qsize > 1) {
+			const Node* cur_node = q.front();
+			if (1 == qsize - 1) {  // the +1 logic
+				res.push_back(cur_node->value);
+			}
+			q.pop();
+
+			if (cur_node->left) {
+				q.push(cur_node->left);
+			}
+			if (cur_node->right) {
+				q.push(cur_node->right);
+			}
+			qsize--;
+		}
+	}
+
+	for (int x: res) {
+		cout << x << " ";
+	}
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -682,6 +717,11 @@ int main(void) {
 	cout << "\n----------------\n";
 	cout << "bottom view of tree: \n";
 	bottom_view_of_tree(root);
+	cout << "\n----------------\n";
+	/* root->left->left->left = new Node(4);  // uncomment to test right view
+	root->left->left->left->right = new Node(5);  // uncomment to test right view */
+	cout << "right view of tree: \n";
+	right_view_of_binary_tree(root);
 
 	return 0;
 }
