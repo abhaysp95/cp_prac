@@ -691,6 +691,57 @@ void left_view_of_binary_tree(const Node* root) {
 	}
 }
 
+// symmetric binary tree
+// a binary tree symmetric to the root node, doesn't necessarily means that for
+// each node in the tree (ie., the subtrees), the subtrees are symmetrical too
+bool symmetrical_binary_tree(const Node* root) {
+	if (nullptr == root) return true;
+
+	queue<const Node*> q{};
+	q.push(root);
+
+	auto is_symmetric = [](const vector<int>& vec) -> bool {
+		if (1 == vec.size()) return true;
+
+		// this vec can't have odd size, other than 1
+		size_t sz = vec.size();
+		for (size_t i{}; i < (sz >> 1); i++) {
+			if (vec[i] != vec[sz - i - 1]) {
+				return false;
+			}
+		}
+
+		return true;
+	};
+
+	while (!q.empty()) {
+		size_t qsize = q.size() + 1;
+		vector<int> lnodes{};
+
+		while (1 < qsize) {
+			const Node* cnode = q.front();
+			q.pop();
+
+			lnodes.push_back(cnode->value);
+
+			if (cnode->left) {
+				q.push(cnode->left);
+			}
+			if (cnode->right) {
+				q.push(cnode->right);
+			}
+
+			qsize--;
+		}
+
+		if (!is_symmetric(lnodes)) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -759,6 +810,8 @@ int main(void) {
 	cout << "\n----------------\n";
 	cout << "left view of tree: \n";
 	left_view_of_binary_tree(root);
+	cout << "\n----------------\n";
+	cout << "is tree symmetric (root): " << (symmetrical_binary_tree(root) ? "true" : "false") << '\n';
 
 	return 0;
 }
