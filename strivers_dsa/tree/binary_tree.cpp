@@ -33,6 +33,16 @@ void add_few_node(Node* &root) {
 	root->right->right->right = new Node(16);
 }
 
+void build_symmetric_tree(Node* &root) {
+	root = new Node(1);
+	root->left = new Node(2);
+	root->right = new Node(2);
+	root->left->left = new Node(3);
+	root->left->right = new Node(4);
+	root->right->left = new Node(4);
+	root->right->right = new Node(3);
+}
+
 void preorder_traversal_recursive(const Node* root) {
 	if (nullptr == root) {
 		return;
@@ -742,6 +752,29 @@ bool symmetrical_binary_tree(const Node* root) {
 	return true;
 }
 
+bool are_trees_symmetrical(const Node* root1, const Node* root2) {
+	if (nullptr == root1 && nullptr == root2) {
+		return true;
+	}
+	if ((!root1 && root2) || (root1 && !root2)  // either one of root in null
+			|| (root1->value != root2->value)) {  // value of the two roots doesn't match
+		return false;
+	}
+
+	return are_trees_symmetrical(root1->left, root2->right)
+		&& are_trees_symmetrical(root1->right, root2->left);
+}
+
+// divide the tree into two subtress of root and do the mirror traversal with each other
+bool symmetrical_binary_tree_second_approach(const Node* root) {
+	if (nullptr == root  // no node
+			|| (nullptr == root->left && nullptr == root->right)) {  // single node
+		return true;
+	}
+
+	return are_trees_symmetrical(root->left, root->right);
+}
+
 int main(void) {
 	Node *root = nullptr;
 	add_few_node(root);
@@ -811,7 +844,15 @@ int main(void) {
 	cout << "left view of tree: \n";
 	left_view_of_binary_tree(root);
 	cout << "\n----------------\n";
-	cout << "is tree symmetric (root): " << (symmetrical_binary_tree(root) ? "true" : "false") << '\n';
+	Node* symmetric_root = nullptr;
+	build_symmetric_tree(symmetric_root);
+	cout << "is tree symmetric (root): " << (symmetrical_binary_tree(root) ? "true" : "false");
+	cout << "\n----------------\n";
+	cout << "is tree symmetric (symmetric_root): " << (symmetrical_binary_tree(symmetric_root) ? "true" : "false");
+	cout << "\n----------------\n";
+	cout << "is tree symmetric second approach (root): " << (symmetrical_binary_tree_second_approach(root) ? "true" : "false");
+	cout << "\n----------------\n";
+	cout << "is tree symmetric second approach (symmetric_root): " << (symmetrical_binary_tree_second_approach(symmetric_root) ? "true" : "false");
 
 	return 0;
 }
