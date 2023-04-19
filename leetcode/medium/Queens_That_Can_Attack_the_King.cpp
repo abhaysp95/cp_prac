@@ -4,12 +4,15 @@
 
 using namespace std;
 using veci = vector<int>;
+using vecb = vector<bool>;
 using vec2di = vector<vector<int>>;
+using vec2db = vector<vector<bool>>;
 
 class Solution {
+#define SZ 8  // given in question
+
 	public:
 		vec2di queensAttackTheKing(vec2di& queens, veci& king) {
-#define SZ 8  // given in question
 			vec2di res{};
 
 			// create the board (makes it easy)
@@ -22,7 +25,7 @@ class Solution {
 			board[king[0]][king[1]] = 2;
 
 			const int kx = king[0], ky = king[1];
-			if (!((kx >= 0 && kx < SZ) && (ky >= 0 && ky < SZ))) {
+			if (!(min(kx, ky) >= 0 && max(kx, ky) < SZ)) {
 				return res; // don't know what to do here (it's just wrong)
 			}
 
@@ -107,6 +110,32 @@ class Solution {
 
 			return res;
 		}
+
+		vec2di queensAttackTheKing_shorter_version(vec2di& queens, veci& king) {
+			vec2db board(SZ, vecb(SZ, false));
+			vec2di res{};
+
+			for (veci& queen: queens) {
+				board[queen[0]][queen[1]] = true;
+			}
+
+			for (int i = -1; i <= 1; i++) {
+				for (int j = -1; j <= 1; j++) {
+					if (!i && !j) continue;
+					int kx = king[0] + i, ky = king[1] + j;
+					while (min(kx, ky) >= 0 && max(kx, ky) < SZ) {
+						if (board[kx][ky]) {
+							res.push_back({kx, ky});
+							break;
+						}
+						kx += i, ky += j;
+					}
+				}
+			}
+
+			return res;
+		}
+
 };
 
 int main(void) {
@@ -116,7 +145,7 @@ int main(void) {
 	veci king = {3, 3};
 
 	Solution sol{};
-	vec2di selected_queens = sol.queensAttackTheKing(queens, king);
+	vec2di selected_queens = sol.queensAttackTheKing_shorter_version(queens, king);
 
 	for (veci q: selected_queens) {
 		cout << q[0] << ',' << q[1] << '\n';
