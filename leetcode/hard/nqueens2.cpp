@@ -1,12 +1,12 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-using vec2d = vector<vector<char>>;
+using vecstr = vector<vector<char>>;
 
 class Solution {
 	public:
 		int totalNQueens(int n) {
-			vec2d board(n, vector<char>(n, '.'));
+			vecstr board(n, vector<char>(n, '.'));
 
 			size_t count{};
 			nqueens(board, n, 0, count);
@@ -15,7 +15,7 @@ class Solution {
 		}
 
 	private:
-		void nqueens(vec2d& board, const int n, int i, size_t& count) {
+		void nqueens(vecstr& board, const int n, int i, size_t& count) {
 			if (i == n) {
 				count++;
 				return;
@@ -31,7 +31,7 @@ class Solution {
 			}
 		}
 
-		bool check(const vec2d& board, const int i, const int j, const int n) {
+		bool check(const vecstr& board, const int i, const int j, const int n) {
 			if ((i >= 0 && i < n) && (j >= 0 && j < n)) {
 				// queen attacks straight
 				for (int x = 0; x < i; x++) {
@@ -44,18 +44,6 @@ class Solution {
 						return false;
 					}
 				}
-				/* for (int x = i; x >= 0; x--) {
-					for (int y = j; y < n; y++) {
-						if (board[x][y] == 'Q' && (x != i && y != j)) {
-							return false;
-						}
-					}
-					for (int y = j; y >= 0; y--) {
-						if (board[x][y] == 'Q' && (x != i && y != j)) {
-							return false;
-						}
-					}
-				} */
 
 				for (int x = i; x >= 0; x--) {
 					int y1 = j - (i - x), y2 = j + (i - x);
@@ -68,6 +56,7 @@ class Solution {
 						}
 					}
 				}
+
 				return true;
 			}
 
