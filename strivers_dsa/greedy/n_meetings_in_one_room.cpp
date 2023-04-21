@@ -32,7 +32,7 @@ void max_meeting_in_one_room(const pi2* mdetails) {
 	for (size_t i{1}; i < SZ; i++) {
 		int pend = updated_mdetails[last_selected_meeting].first.second;
 		int nstart = updated_mdetails[i].first.first;
-		if (pend < nstart) {
+		if (pend < nstart) {  // condition of question
 			// printf("%d, %d\n", nstart, updated_mdetails[i].first.second);
 			printf("%zu ", updated_mdetails[i].second);
 			last_selected_meeting = i;
