@@ -36,6 +36,26 @@ size_t get_max_stations_needed(p2s* train_details) {
 	return stations.size();
 }
 
+size_t get_max_stations_needed_better_approach(const int* arr, const int* dep) {
+	size_t max_platform{1};
+	size_t i{1} /* arrival */, j{}; /* departure */
+
+	size_t curr_count_platform{};
+	while (i < SZ && j < SZ) {
+		if (arr[i] <= dep[j]) {  // new train arrived before previous one departed
+			curr_count_platform++;
+			i++;
+		} else {  // train departed before new train arrived
+			curr_count_platform--;
+			j++;
+		}
+
+		max_platform = max(max_platform, curr_count_platform);
+	}
+
+	return max_platform;
+}
+
 int main(void) {
 	p2s train_details[6] {{900, 910}, {940, 1200}, {950, 1120}, {1100, 1130}, {1500, 1900}, {1800, 2000}};
 
