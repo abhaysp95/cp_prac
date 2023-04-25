@@ -40,6 +40,26 @@ int fib_tabular(int n) {
 	return buf[n];
 }
 
+int fib_tabular_space_optimized(int n) {
+	if (0 == n || 1 == n) {
+		return n;
+	}
+
+	int buf[2];
+	memset(buf, -1, sizeof(buf));
+
+	buf[0] = 0;
+	buf[1] = 1;
+
+	for (size_t i = 2; i <= n; i++) {
+		int res = buf[0] + buf[1];
+		buf[0] = buf[1];
+		buf[1] = res;
+	}
+
+	return buf[1];
+}
+
 int main(void) {
 	int num = 0;
 	scanf("%d", &num);
@@ -49,7 +69,8 @@ int main(void) {
 	/* memset(arr, -1, sizeof(arr));
 	printf("fib_memoization: %d\n", fib_memoization(num)); */
 
-	printf("fib_tabular: %d\n", fib_tabular(num));
+	// printf("fib_tabular: %d\n", fib_tabular(num));
+	printf("fib_tabular_space_optimized: %d\n", fib_tabular_space_optimized(num));
 
 	return 0;
 }
