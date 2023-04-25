@@ -22,14 +22,34 @@ int fib_memoization(int n) {
 	return arr[n];
 }
 
+int fib_tabular(int n) {
+	if (0 == n || 1 == n) {
+		return n;
+	}
+
+	int buf[n + 1];
+	memset(buf, -1, sizeof(buf));
+
+	buf[0] = 0;
+	buf[1] = 1;
+
+	for (size_t i = 2; i <= n; i++) {
+		buf[i] = buf[i - 1] + buf[i - 2];
+	}
+
+	return buf[n];
+}
+
 int main(void) {
 	int num = 0;
 	scanf("%d", &num);
 
 	// printf("fib_recursive: %d\n", fib_recursive(num));
 
-	memset(arr, -1, sizeof(arr));
-	printf("fib_memoization: %d\n", fib_memoization(num));
+	/* memset(arr, -1, sizeof(arr));
+	printf("fib_memoization: %d\n", fib_memoization(num)); */
+
+	printf("fib_tabular: %d\n", fib_tabular(num));
 
 	return 0;
 }
