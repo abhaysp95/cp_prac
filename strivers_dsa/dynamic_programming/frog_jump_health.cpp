@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <cstdio>
 
-// #define DEBUG 1
+#define DEBUG 1
 
 using namespace std;
 
@@ -43,7 +43,7 @@ int frog_jump_health_tabular(const vector<int>& health) {
 
 	// base
 	arr[0] = 0;
-	arr[1] = health[0];
+	arr[1] = abs(health[1] - health[0]);
 
 	for (size_t i = 2; i < health.size(); i++) {  // 0-based idx (hence, run upto size - 1
 		arr[i] = min(arr[i - 1] + abs(health[i] - health[i - 1]),
@@ -61,7 +61,7 @@ int frog_jump_health_tabular(const vector<int>& health) {
 }
 
 int main(void) {
-	vector<int> health = {10, 20, 30, 10};
+	vector<int> health = {30, 10, 60, 10, 60, 50};  // {10, 20, 30, 10};
 
 	// printf("%d\n", frog_jump_health_recursive(health, health.size() - 1));
 
