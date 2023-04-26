@@ -48,6 +48,22 @@ int max_sum_non_adj_tabular(const vector<int>& arr) {
 	return space[arr.size()];
 }
 
+int max_sum_non_adj_space_optimized(const vector<int>& arr) {
+	int space[2];
+	memset(space, -1, sizeof(space));
+
+	space[0] = 0;
+	space[1] = arr[0];
+
+	for (size_t i = 2; i <= arr.size(); i++) {
+		int temp = max(space[1], space[0] + arr[i - 1]);  // arr is moving 1 behind space
+		space[0] = space[1];
+		space[1] = temp;
+	}
+
+	return space[1];
+}
+
 int main(void) {
 	vector<int> arr = {2, 1, 4, 9};
 
@@ -57,7 +73,8 @@ int main(void) {
 	memset(space, -1, sizeof(space));
 	printf("%d\n", max_sum_non_adj_memoized(arr, arr.size() - 1, space)); */
 
-	printf("%d\n", max_sum_non_adj_tabular(arr));
+	// printf("%d\n", max_sum_non_adj_tabular(arr));
+	printf("%d\n", max_sum_non_adj_space_optimized(arr));
 
 	return 0;
 }
