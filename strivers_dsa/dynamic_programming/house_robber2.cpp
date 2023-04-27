@@ -41,6 +41,34 @@ int house_robber_tabular(const vector<int>& nums) {
 	return max(left, right);
 }
 
+int house_robber_space_optimized(const vector<int>& nums) {
+	int space[2];  // cause we'll leave 1 house (in each case)
+
+	// leave the right-most house
+	space[0] = 0;
+	space[1] = nums[0];
+	for (size_t i = 2; i < nums.size(); i++) {
+		int temp = max(space[1], space[0] + nums[i - 1]);
+		space[0] = space[1];
+		space[1] = temp;
+	}
+	int left = space[1];
+
+	// leave the left-most house
+	space[0] = 0;
+	space[1] = nums[1];
+	for (size_t i = 2; i < nums.size(); i++) {
+		int temp = max(space[1], space[0] + nums[i]);
+		space[0] = space[1];
+		space[1] = temp;
+	}
+	int right = space[1];
+
+	printf("%d, %d\n", left, right);
+
+	return max(left, right);
+}
+
 // first house is adjacent of last house (circular structure)
 int house_robber_solution(const vector<int>& nums) {
 	if (nums.size() == 1) return nums[0];
@@ -63,7 +91,7 @@ int house_robber_solution(const vector<int>& nums) {
 int main(void) {
 	vector<int> vec = { 200, 3, 140, 20, 10 }; /* { 1, 2, 3, 1 }; */ /* { 2, 3, 2 }; */
 
-	printf("%d\n", house_robber_tabular(vec));
+	printf("%d\n", house_robber_space_optimized(vec));
 
 	return 0;
 }
