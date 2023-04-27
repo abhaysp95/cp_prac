@@ -18,6 +18,7 @@ int house_robber_memoized(const vector<int>& arr, int start, int idx, int *space
 }
 
 int house_robber_tabular(const vector<int>& nums) {
+	if (nums.size() == 1) return nums[0];
 	int space[nums.size()];  // cause we'll leave 1 house (in each case)
 
 	// leave the right-most house
@@ -42,6 +43,8 @@ int house_robber_tabular(const vector<int>& nums) {
 }
 
 int house_robber_space_optimized(const vector<int>& nums) {
+	if (nums.size() == 1) return nums[0];
+
 	int space[2];  // cause we'll leave 1 house (in each case)
 
 	// leave the right-most house
