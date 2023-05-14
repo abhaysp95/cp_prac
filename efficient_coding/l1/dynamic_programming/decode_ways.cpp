@@ -116,6 +116,29 @@ size_t decoded_ways_reverse_tabulation(const vector<int>& code) {
 	return space[0];
 }
 
+size_t decoded_ways_reverse_tabulation_space_optimized(const vector<int>& code) {
+
+	size_t p1 = 1, p2 = 0;
+	for (size_t i = code.size(); i > 0; i--) {
+		size_t res{};
+		if (code[i - 1] == 0) {
+			res = 0;
+		} else {
+			res = p1;
+			if (i + 1 <= code.size()) {
+				int num = code[i - 1] * code[i];
+				if (num <= 26) {
+					res += p2;
+				}
+			}
+		}
+		p2 = p1;
+		p1 = res;
+	}
+
+	return p1;
+}
+
 int main(void) {
 	size_t T{};
 	cin >> T;
@@ -142,7 +165,8 @@ int main(void) {
 		/* vector<int> space(code.size() + 1, -1);
 		cout << decoded_ways_reverse(code, code.size(), space) << endl; */
 
-		cout << decoded_ways_reverse_tabulation(code) << endl;
+		// cout << decoded_ways_reverse_tabulation(code) << endl;
+		cout << decoded_ways_reverse_tabulation_space_optimized(code) << endl;
 	}
 
 	return 0;
