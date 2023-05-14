@@ -46,8 +46,8 @@ size_t decoded_ways(const vector<int>& code, size_t idx, vector<int>& space) {
 	return space[idx] = res;
 }
 
-// TODO: not correct, fix it
-size_t decoded_ways_tabulation(const vector<int>& code) {
+// TODO: not correct, fix it (if you want to change it exactly same as memoized solution)
+/* size_t decoded_ways_tabulation(const vector<int>& code) {
 	vector<int> space(code.size() + 1, 0);
 	space[0] = 1;
 
@@ -60,10 +60,60 @@ size_t decoded_ways_tabulation(const vector<int>& code) {
 					space[idx] += space[idx - 2];
 				}
 			}
+		} else {
+			space[idx - 1] -= 1;
+			space[idx] = space[idx - 1];
 		}
 	}
 
 	return space[code.size()];
+} */
+
+// NOTE: if we move backwards of code to decode it, same solution can be used in
+// both recursive and tabulation way. Here's how to do it
+// recursively memoized way
+size_t decoded_ways_reverse(const vector<int>& code, size_t idx, vector<int>& space) {
+	if (idx == 0) {
+		return 1;
+	}
+
+	if (space[idx] != -1) {
+		return space[idx];
+	}
+
+	size_t sum{};
+	if (code[idx - 1] != 0) {
+		sum += decoded_ways_reverse(code, idx - 1, space);
+	}
+	if (idx > 1 && code[idx - 2] != 0) {
+		int num = code[idx - 2] * 10 + code[idx - 1];
+		if (num <= 26) {
+			sum += decoded_ways_reverse(code, idx - 2, space);
+		}
+	}
+
+	return space[idx] = sum;
+}
+
+size_t decoded_ways_reverse_tabulation(const vector<int>& code) {
+	vector<int> space(code.size() + 1, -1);
+	space[code.size()] = 1;
+
+	for (size_t i = code.size(); i > 0; i--) {
+		if (code[i - 1] == 0) {
+			space[i - 1] = 0;  // main thing to keep in mind
+		} else {
+			space[i - 1] = space[i];
+			if (i + 1 <= code.size()) {  // index not for last element
+				int num = code[i - 1] * 10 + code[i];
+				if (num <= 26) {
+					space[i - 1] += space[i + 1];  // already added space[i] 4 lines above
+				}
+			}
+		}
+	}
+
+	return space[0];
 }
 
 int main(void) {
@@ -79,14 +129,20 @@ int main(void) {
 			code.push_back(c - '0');
 		}
 
-		vector<int> space(code.size(), -1);
-		cout << decoded_ways(code, 0, space) << endl;
+		// vector<int> space(code.size(), -1);
+		/* cout << decoded_ways_reverse(code, 0, space) << endl;
 		for (int x: space) {
 			cout << x << " ";
 		}
-		cout << "\n**********" << endl;
+		cout << "\n**********" << endl; */
 
 		// cout << decoded_ways_tabulation(code) << endl;
+
+
+		/* vector<int> space(code.size() + 1, -1);
+		cout << decoded_ways_reverse(code, code.size(), space) << endl; */
+
+		cout << decoded_ways_reverse_tabulation(code) << endl;
 	}
 
 	return 0;
