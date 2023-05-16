@@ -42,7 +42,7 @@ size_t count_subset_sum_tabulation(const vector<int>& nums, size_t target) {
 
 	// print the subsets with the target sum
 	// the method works for both when space is filled with either counts or with boolean value
-	dqp dq{{{nums.size(), target}, ""}};
+	dqp dq{{{nums.size(), target}, ""}};  // {{row -> number, column -> target}, string -> resultant subset}
 	while (!dq.empty()) {
 		pp cpair = dq.front();
 		dq.pop_front();
