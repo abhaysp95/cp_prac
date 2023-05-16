@@ -42,6 +42,9 @@ bool is_subset_sum_tabulation(const vec& nums, size_t target) {
 		}
 	}
 
+	// get all the subsets
+	// mentioned in problem "subset_sum_count.cpp" in this same folder
+
 	return space[nums.size()][target];
 }
 
