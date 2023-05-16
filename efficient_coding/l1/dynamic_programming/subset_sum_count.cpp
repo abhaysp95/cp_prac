@@ -1,8 +1,11 @@
 #include <bits/stdc++.h>
+#include <deque>
 
 using namespace std;
 using vvec = vector<vector<int>>;
 using vec = vector<int>;
+using dqp = deque<pair<pair<size_t, size_t>, string>>;
+using pp = pair<pair<size_t, size_t>, string>;
 
 size_t count_subset_sum(const vector<int>& nums, size_t target, int idx, size_t csum, vvec& space) {
 	if (csum == target) {
@@ -34,6 +37,31 @@ size_t count_subset_sum_tabulation(const vector<int>& nums, size_t target) {
 			} else {  // else I may or may not include the number
 				space[i][j] = space[i - 1][j] + space[i - 1][j - nums[i - 1]];
 			}
+		}
+	}
+
+	// print the subsets with the target sum
+	// the method works for both when space is filled with either counts or with boolean value
+	dqp dq{{{nums.size(), target}, ""}};
+	while (!dq.empty()) {
+		pp cpair = dq.front();
+		dq.pop_front();
+
+		if (cpair.first.first == 0 || cpair.first.second == 0) {
+			cout << cpair.second << '\n';
+			continue; // probably
+		}
+
+		// check inclusion
+		if (cpair.first.second >= nums[cpair.first.first - 1]) {
+			dq.push_front({{cpair.first.first - 1, cpair.first.second - nums[cpair.first.first - 1]},
+					to_string(nums[cpair.first.first - 1]) + " " + cpair.second});
+		}
+
+		// check exclusion (check if target is still true if current number wasn't added, if yes then add it)
+		if (space[cpair.first.first - 1][cpair.first.second]) {
+			dq.push_front({{cpair.first.first - 1, cpair.first.second},
+					cpair.second});
 		}
 	}
 
