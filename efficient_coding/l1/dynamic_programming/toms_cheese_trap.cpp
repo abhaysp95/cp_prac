@@ -73,3 +73,11 @@ int main(void) {
 
 	return 0;
 }
+
+/** input
+ * r, j, t
+ * i, j (t times)
+ *
+ * 3 3 1
+ * 2 1
+ */
