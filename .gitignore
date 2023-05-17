@@ -1,2 +1,4 @@
 graph_theory/
 **/a.out
+**/core.dump
+**/input.txt
