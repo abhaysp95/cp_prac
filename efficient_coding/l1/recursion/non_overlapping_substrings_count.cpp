@@ -34,5 +34,8 @@ int main(void) {
 	}
 	cout << endl;
 
+	// NOTE: if you just want the total count of non-overlapping substrings, use this formula
+	cout << "count: " << pow(2, (str.size() - 1)) << endl;
+
 	return 0;
 }
