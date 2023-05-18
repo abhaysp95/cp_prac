@@ -18,6 +18,7 @@ for i in range(2, lpstr):
         space[j][k] = 1 if pstr[j] == pstr[k] and space[j + 1][k - 1] == 1 else 0
 
 
+# get out longest palindrome of the string
 start, end = 0, 0
 for i in range(lpstr):
     for j in range(i, lpstr):
@@ -26,4 +27,15 @@ for i in range(lpstr):
                 end = j
                 start = i
 
-print(pstr[start:end + 1])
+if pstr[start:end + 1].find(cstr) != -1:
+    print(pstr[start:end + 1])
+else:
+    print(-1)
+
+
+# inputs:
+# amambbma
+# amb
+# ################
+# amamalayalam
+# yalam
