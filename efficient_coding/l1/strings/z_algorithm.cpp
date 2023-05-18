@@ -56,11 +56,56 @@ vector<size_t> z_algo_unoptimized(const string& hay, const string& needle) {
 	return res;
 }
 
+vector<size_t> z_algo_optimized(const string& hay, const string& needle) {
+	string wstr = needle + "$" + hay;
+	vector<size_t> z_arr(wstr.size(), 0);
+
+	size_t l{}, r{};  // denote the matched prefix range
+	size_t i = 1;  // start the matching from here
+
+	// condition to satisfy: 0 <= l <= i <= r <= wstr.size()
+	for (; i < wstr.size(); i++) {
+		if (i > r) {
+			l = r = i;
+			while (r < wstr.size() && wstr[r] == wstr[r - l]) {  // compare with prefix and increase range
+				r++;
+			}
+			z_arr[i] = r - l;
+			r--;
+		} else {  // i is between l & r, can we fill the previously used value
+			size_t idx = i - l;
+			if (i + z_arr[idx] <= r) {
+				z_arr[i] = z_arr[idx];
+			} else {
+				l = i;
+				while (r < wstr.size() && wstr[r] == wstr[r - l]) {
+					r++;
+				}
+				z_arr[i] = r - l;
+				r--;
+			}
+		}
+	}
+
+	// print the z-array and also get index
+	vector<size_t> res{};
+	for (size_t i = 0; i < z_arr.size(); i++) {
+		cout << z_arr[i] << " ";
+		if (z_arr[i] == needle.size()) {
+			res.push_back(i - needle.size() - 1);
+		}
+	}
+	cout << endl;
+
+	return res;
+}
+
 int main(void) {
 	// string hay{"aabdaafabaabdf"}, needle{"aabdf"};
 	string hay{"ababaa"}, needle{"aba"};
 
-	vector<size_t> matched_idx = z_algo_unoptimized(hay, needle);
+	// vector<size_t> matched_idx = z_algo_unoptimized(hay, needle);
+	vector<size_t> matched_idx = z_algo_optimized(hay, needle);
 	for (const int x: matched_idx) {
 		cout << x << " ";
 	}
