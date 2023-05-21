@@ -75,17 +75,18 @@ void find_nearest_second_time(const vec2d& mat, queue<cdl>& q, vec2d& visited, v
 		for (int drow{-1}; drow <= 1; drow++) {
 			for (int dcol{-1}; dcol <= 1; dcol++) {
 				if ((0 == drow || 0 == dcol) && (drow != dcol)) {
-					i += drow, j+= dcol;
-					if ((i >= 0 && i < r) && (j >= 0 && j < c)) {
-						if (!visited[i][j] && 0 == mat[i][j]) {
-							visited[i][j] = 1;
-							q.push({{i, j}, l + 1});
-							res[i][j] = l + 1;
-						} else if (0 == mat[i][j]) {
+					int x = i + drow;
+					int y = j + dcol;
+					if ((x >= 0 && x < r) && (y >= 0 && y < c)) {
+						if (!visited[x][y] && 0 == mat[x][y]) {
+							visited[x][y] = 1;
+							q.push({{x, y}, l + 1});
+							res[x][y] = l + 1;
+						} else if (0 == mat[x][y]) {
 							// you were initially 0, but you're already visited it's possible
 							// that somebody else is nearer than the distance you've stored
-							if (l + 1 < res[i][j]) {
-								res[i][j] = l + 1;
+							if (l + 1 < res[x][y]) {
+								res[x][y] = l + 1;
 							}
 						}
 					}
