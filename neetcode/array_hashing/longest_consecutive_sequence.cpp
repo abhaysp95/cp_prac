@@ -54,7 +54,7 @@ public:
 	  for (const int x: nums) {
 		  if (us.find(x - 1) == us.end()) {  // no left neighbour (a new sequence starts)
 			  int count = 0;  // from 0, means it'll also include itself in sequence
-			  while (us.find(count) != us.end()) {
+			  while (us.find(x + count) != us.end()) {
 				  count++;
 			  }
 
