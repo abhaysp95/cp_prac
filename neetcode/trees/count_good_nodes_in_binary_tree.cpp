@@ -14,8 +14,24 @@ struct TreeNode {
 
 class Solution {
 	public:
-		vector<int> rightSideView(TreeNode* root) {
+		int goodNodes(TreeNode* root) {
+			if (root == nullptr) return 0;
+			size_t gn = 1;
+			count_good_nodes(root, gn, root->val);
 
+			return gn;
+		}
+
+		void count_good_nodes(TreeNode *root, size_t& gn, int maxp) {
+			if (root == nullptr) return;
+			if (root->left) {
+				if(root->left->val >= maxp) gn++;
+				count_good_nodes(root->left, gn, max(maxp, root->left->val));
+			}
+			if (root->right) {
+				if (root->right->val >= maxp) gn++;
+				count_good_nodes(root->right, gn, max(maxp, root->right->val));
+			}
 		}
 };
 
