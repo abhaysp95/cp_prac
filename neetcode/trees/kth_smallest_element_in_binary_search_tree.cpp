@@ -30,6 +30,28 @@ class Solution {
 			inorder(root->right, traversed);
 		}
 
+		// solving with iterative inorder traversal */
+		int kthSmallest2(TreeNode* root, int k) {
+			if (root == NULL) return -1;
+			stack<TreeNode*> st{};
+			st.push(root);
+
+			TreeNode* cur = root->left;
+			while (!st.empty()) {
+				while (cur != NULL) {
+					st.push(cur);
+					cur = cur->left;
+				}
+				cur = st.top();
+				if (--k == 0) {
+					return cur->val;
+				}
+				cur = cur->right;
+			}
+
+			return -1;  // shouldn't reach here (as per question constraint)
+		}
+
 		/* int kthSmallest(TreeNode* root, int k) {
 		   int count{1}, res{};
 		   if(nullptr == root) return res;
@@ -43,4 +65,5 @@ class Solution {
 		   get_element(root->left, k, count, res);
 		   if(count++ == k) res = root->val;
 		   get_element(root->right, k, count, res); */
+
 };
