@@ -90,3 +90,9 @@ public:
  * KthLargest* obj = new KthLargest(k, nums);
  * int param_1 = obj->add(val);
  */
+
+/** TODO: do these too
+ * wiggle sort 2
+ * third max number
+ * find the kth largest integer in array
+ */
