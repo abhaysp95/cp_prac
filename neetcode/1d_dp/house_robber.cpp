@@ -12,12 +12,12 @@ class Solution {
 			// return rob_house_memoized(nums, 0);
 
 			// tabulation
-			this->space.resize(nums.size(), 0);
+			this->space.resize(nums.size() + 1, 0);
 			this->space[1] = nums[0];
 
-			for (size_t i = 1; i < nums.size(); i++) {
+			for (size_t i = 2; i <= nums.size(); i++) {
 				this->space[i] = max(
-						nums[i] + (i > 1 ? this->space[i - 2] : 0),  // take
+						nums[i - 1] + this->space[i - 2],  // take
 						this->space[i - 1]  // no take
 						);
 			}
