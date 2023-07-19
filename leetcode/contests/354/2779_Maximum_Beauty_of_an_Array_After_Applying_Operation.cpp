@@ -5,9 +5,16 @@
 using namespace std;
 
 class Solution {
+	int offset = 1e5;
+	int freq[(int)(3 * 1e5 + 2)];
+
+public:
+	Solution() {
+		memset(this->freq, 0, sizeof(this->freq));
+	}
 
 	// brute force solution
-	int maximumBeauty(vector<int>& nums, int k) {
+	int maximumBeauty_brute_force(vector<int>& nums, int k) {
 		vector<pair<int, int>> ranges(nums.size(), pair<int, int>{});
 
 		int minl = INT_MAX, maxr = INT_MIN;
@@ -28,4 +35,41 @@ class Solution {
 
 		return maxf;
 	}
+
+	int maximumBeauty1(vector<int>& nums, int k) {
+		int minl = INT_MAX, maxr = INT_MIN;
+		for (int i = 0; i < nums.size(); i++) {
+			minl = min(minl, nums[i] - k);
+			maxr = max(maxr, nums[i] + k);
+
+			freq[nums[i] - k + offset]++;
+			freq[nums[i] + k + offset + 1]--;
+		}
+
+		int maxc = INT_MIN, count = 0;
+		for (int i = minl; i <= maxr; i++) {
+			count += freq[i + offset];
+			maxc = max(maxc, count);
+		}
+
+		return count;
+	}
+
+	// same approach as above one (but uses map)
+	int maximumBeauty2(vector<int>& nums, int k) {
+		map<int, int> freq{};
+		for (int i = 0; i < nums.size(); i++) {
+			freq[nums[i] - k]++;
+			freq[nums[i] + k + 1]--;
+		}
+
+		int maxc = INT_MIN, count = 0;
+		for (const pair<const int, int>& p: freq) {
+			count += p.second;
+			maxc = max(maxc, count);
+		}
+
+		return count;
+	}
+
 };
