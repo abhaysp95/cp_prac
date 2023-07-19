@@ -73,3 +73,5 @@ public:
 	}
 
 };
+
+// learnt: carefully observing constraint, as well as, how to show a range in given array and concept of prefix sum
