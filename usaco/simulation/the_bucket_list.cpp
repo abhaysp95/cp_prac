@@ -1,13 +1,17 @@
+// wrong
+
 #include <ios>
 #include <iostream>
 #include <vector>
 #include <array>
 #include <cmath>
 #include <string>
+#include <algorithm>
+#include <fstream>
 
 using namespace std;
 
-inline int nxt() {
+inline int nxt(istream& cin = std::cin) {
 	int x;
 	cin >> x;
 	return x;
@@ -17,10 +21,13 @@ int32_t main(void) {
 	ios_base::sync_with_stdio(false);
 	cin.tie(nullptr); cerr.tie(nullptr);
 
-	int n = nxt();
+	ifstream fin("blist.in");
+	ofstream fout("blist.out");
+
+	int n = nxt(fin);
 	vector<array<int, 3>> data(n);
 	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < 3; j++) data[i][j] = nxt();
+		for (int j = 0; j < 3; j++) data[i][j] = nxt(fin);
 	}
 
 	sort(data.begin(), data.end(), [&](auto& a1, auto& a2) {
@@ -45,7 +52,7 @@ int32_t main(void) {
 		cout << '\n'; */
 	}
 
-	cout << buckets.size() << '\n';
+	fout << buckets.size() << '\n';
 
 	return 0;
 }

@@ -1,13 +1,16 @@
+// wrong
+
 #include <ios>
 #include <iostream>
 #include <vector>
 #include <array>
 #include <cmath>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
-inline int nxt() {
+inline int nxt(istream& cin = std::cin) {
 	int x;
 	cin >> x;
 	return x;
@@ -17,7 +20,10 @@ int32_t main(void) {
 	ios_base::sync_with_stdio(false);
 	cin.tie(nullptr); cerr.tie(nullptr);
 
-	int m = nxt(), n = nxt(), k = nxt();
+	ifstream fin("cowsignal.in");
+	ofstream fout("cowsignal.out");
+
+	int m = nxt(fin), n = nxt(fin), k = nxt(fin);
 	vector<string> res;
 
 	for (int i = 0; i < m; i++) {
@@ -32,7 +38,7 @@ int32_t main(void) {
 	}
 
 	for (const string s: res) {
-		cout << s << '\n';
+		fout << s << '\n';
 	}
 
 	return 0;
