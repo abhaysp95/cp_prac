@@ -1,3 +1,4 @@
+#include <fstream>
 #include <ios>
 #include <iostream>
 #include <vector>
@@ -5,7 +6,7 @@
 
 using namespace std;
 
-inline int nxt() {
+inline int nxt(istream& cin = std::cin) {
 	int x;
 	cin >> x;
 	return x;
@@ -15,12 +16,15 @@ int32_t main(void) {
 	ios_base::sync_with_stdio(false);
 	cin.tie(nullptr); cerr.tie(nullptr);
 
-	int N = nxt();
+	ifstream fin("shell.in");
+	ofstream fout("shell.out");
+
+	int N = nxt(fin);
 	vector<array<int, 3>> moves(N, array<int, 3>{});
 	for (int i = 0; i < N; i++) {
-		moves[i][0] = nxt();
-		moves[i][1] = nxt();
-		moves[i][2] = nxt();
+		moves[i][0] = nxt(fin);
+		moves[i][1] = nxt(fin);
+		moves[i][2] = nxt(fin);
 	}
 
 	int maxc = 0;
@@ -35,7 +39,7 @@ int32_t main(void) {
 		maxc = max(maxc, count);
 	}
 
-	cout << maxc << '\n';
+	fout << maxc << '\n';
 
 	return 0;
 }
