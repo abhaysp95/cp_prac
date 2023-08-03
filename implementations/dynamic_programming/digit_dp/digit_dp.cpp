@@ -20,7 +20,8 @@ inline int nxt(istream& cin = std::cin) {
 	return x;
 }
 
-// missing 101, when using 'space', why ?
+// TODO: try to transform this into tabulated form
+
 int digit_dp(const vector<int>& num, int d, int k, int idx, int dfreq, bool is_small, vector<int>& store,
 		int (*space)[10][2]) {
 	if (dfreq > k) return 0;
@@ -55,13 +56,7 @@ int digit_dp(const vector<int>& num, int d, int k, int idx, int dfreq, bool is_s
 	return space[idx][dfreq][is_small] = res;
 }
 
-void solve() {
-	// a -> range start
-	// b -> range end
-	// d -> target digit in number
-	// k -> required count of d in number
-	int a = nxt(fin), b = nxt(fin), d = nxt(fin), k = nxt(fin);
-
+int solve_range(int a, int b, int d, int k) {
 	vector<int> num{};
 
 	while (b > 0) {
@@ -74,7 +69,19 @@ void solve() {
 	int space[10][10][2];
 	memset(space, -1, sizeof(space));
 
-	fout << digit_dp(num, d, k, 0, 0, false, store, space) << '\n';
+	return digit_dp(num, d, k, 0, 0, false, store, space);
+}
+
+void solve() {
+	// a -> range start
+	// b -> range end
+	// d -> target digit in number
+	// k -> required count of d in number
+	int a = nxt(fin), b = nxt(fin), d = nxt(fin), k = nxt(fin);
+	int r1 = solve_range(0, b, d, k);
+	int r2 = solve_range(0, a < 1 ? 0 : a - 1, d, k);
+
+	fout << r1 - r2 << '\n';
 }
 
 int32_t main(void) {
