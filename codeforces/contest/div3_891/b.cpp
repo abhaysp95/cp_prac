@@ -24,7 +24,8 @@ string max_num(const string& a, const string& b) {
 	return a.size() == b.size() ? max(a, b) : a.size() > b.size() ? a : b;
 }
 
-void solve() {
+// gave TLE
+void solve_first() {
 	string num;
 	cin >> num;
 	int n = sz(num);
@@ -74,6 +75,20 @@ void solve() {
 
 	cout << num << '\n';
 } */
+
+void solve() {
+	string s;
+	cin >> s;
+	s = '0' + s;
+	int p = s.size();
+	for (int i = s.size() - 1; i >= 0; i--) {
+		if (s[i] >= '5') s[i - 1]++, p = i;
+	}
+	for (int i = (s[0] == '0'); i < s.size(); i++) {
+		cout << (i < p ? s[i] : '0');
+	}
+	cout << "\n";
+}
 
 int32_t main(void) {
 	ios_base::sync_with_stdio(false);
