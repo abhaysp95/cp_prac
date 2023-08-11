@@ -77,6 +77,80 @@ class SolutionTLED {
 		}
 };
 
+class Solution {
+	int drow[4] = {-1, 0, 1, 0};
+	int dcol[4] = {0, -1, 0, 1};
+	public:
+		int maximumSafenessFactor(vector<vector<int>>& grid) {
+			int n = sz(grid);
+			queue<pair<pair<int, int>, int>> q{};
+			auto sfd = initv2d(n, n, INT_MAX);
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+					if (grid[i][j]) {
+						q.push({{i, j}, 0});
+						sfd[i][j] = 0;
+					}
+				}
+			}
+
+			int start = 0, end = 0;
+			while (!q.empty()) {
+				auto p = q.front();
+				q.pop();
+				int x = p.first.first, y = p.first.second, d = p.second;
+				end = max(end, d);
+				for (int k = 0; k < 4; k++) {
+					int nx = x + drow[k], ny = y + dcol[k];
+					if (nx >= 0 && nx < n && ny >= 0 && ny < n && d + 1 < sfd[nx][ny]) {
+						q.push({{nx, ny}, d + 1});
+						sfd[nx][ny] = d + 1;
+					}
+				}
+			}
+
+			int ans = 0;
+			while (start <= end) {
+				int mid = (start + end) / 2;
+				int res = safeness_factor(sfd, mid);
+				if (res) {
+					ans = mid;
+					start = mid + 1;
+				} else end = mid - 1;
+			}
+
+			return ans;
+		}
+
+		int safeness_factor(const vector<vector<int>>& sfd, int mid) {
+			if (sfd[0][0] < mid) return false;
+
+			int n = sz(sfd);
+			auto visited = initv2d(n, n, false);
+			queue<pair<int, int>> q{};
+			q.push({0, 0});
+			visited[0][0] = true;
+
+			while (!q.empty()) {
+				auto p = q.front();
+				q.pop();
+				int x = p.first, y = p.second;
+
+				if (x == n - 1 && y == n - 1) return true;
+
+				for (int k = 0; k < 4; k++) {
+					int nx = x + drow[k], ny = y + dcol[k];
+					if (nx >= 0 && nx < n && ny >= 0 && ny < n && sfd[nx][ny] >= mid && !visited[nx][ny]) {
+						visited[nx][ny] = true;
+						q.push({nx, ny});
+					}
+				}
+			}
+
+			return false;
+		}
+};
+
 void solve() {
 
 }
